@@ -1,0 +1,85 @@
+server:
+  port: 8085
+  address: localhost
+  servlet:
+    context-path: /xa
+
+spring:
+  application:
+    name: ${application.name}
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+  aop:
+    proxy-target-class: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/xa
+    username: postgres
+    password: P@ssw0rd
+    platform: postgres
+    type: com.mchange.v2.c3p0.ComboPooledDataSource
+    tomcat:
+      validation-query: SELECT 1
+      initial-size: 10
+      max-active: 100
+      max-idle: 20
+      max-wait: 3000
+      test-while-idle: true
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database: POSTGRESQL
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+        temp:
+          use_jdbc_metadata_defaults: false
+        show_sql: true
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+  mvc:
+    locale: en_US
+  cloud:
+    discovery:
+      enabled: false
+    config:
+      enabled: false
+      discovery:
+        enabled: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: 
+          issuer-uri: http://${server.address}:${server.port}${server.servlet.context-path}/oauth/token
+
+eureka:
+  client:
+    enabled: false
+
+ribbon:
+  eureka:
+    enabled: false
+
+xa-master:
+  ribbon:
+    listOfServers: localhost:8085
+
+security:
+  oauth2:
+    resource:
+      filter-order: 3
+      jwt:
+        key-value: CfZKBe7IZHxBCgH9Dz49
+      prefer-token-info: true
+      user-info-uri: http://${server.address}:${server.port}/oauth/user
+      token-info-uri: http://${server.address}:${server.port}/check_token
+    client:
+      client-id: xa-core
+      client-secret: secretxa01
+      access-token-uri: http://${server.address}:${server.port}/oauth/token
