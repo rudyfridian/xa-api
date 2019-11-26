@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -30,7 +31,7 @@ import io.github.xaphira.common.utils.DateUtil;
 
 /**
  * @author S201403171
- * @see <a href="https://jsfiddle.net/ridlafadilah/3azd042u/">Generate Signature Header</a>
+ * @see <a href="https://angular-exercise-signature.stackblitz.io/">Generate Signature Header</a>
  */
 
 @Component
@@ -90,9 +91,11 @@ public class SignatureInterceptor implements Filter {
 			} catch (SystemErrorException e) {
 				response.getWriter().write(unauthorized("invalid_signature",e.getMessage()));
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.setContentType(HttpHeaders.CONTENT_TYPE);
 			} catch (Exception e) {
 				response.getWriter().write(unauthorized("invalid_signature",e.getMessage()));
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.setContentType(HttpHeaders.CONTENT_TYPE);
 			}
         }else
         	chain.doFilter(req, res);
