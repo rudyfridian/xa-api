@@ -282,6 +282,7 @@ CREATE TABLE sec_user (
 	verification_code varchar(100),
 	raw text,
 	locale varchar(10) DEFAULT 'en-US' NOT NULL,
+	theme varchar(10) DEFAULT 'default' NOT NULL,
 	authority_default varchar(100),
 	"version" int DEFAULT 0 NOT NULL,
 	is_active boolean DEFAULT true NOT NULL,
