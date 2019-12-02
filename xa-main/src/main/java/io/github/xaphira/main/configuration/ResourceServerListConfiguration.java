@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfiguration;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 import io.github.xaphira.file.configuration.ResourceServerFileAdapter;
 import io.github.xaphira.general.configuration.ResourceServerGeneralAdapter;
@@ -22,6 +23,9 @@ public class ResourceServerListConfiguration {
 	
     @Autowired
     private TokenStore tokenStore;
+	
+    @Autowired
+    private AccessDeniedHandler accessDeniedHandler;
 
 	@Bean
 	protected ResourceServerConfiguration securityResources() {
@@ -30,7 +34,7 @@ public class ResourceServerListConfiguration {
 				super.setConfigurers(configurers);
 			}
 		};
-		resource.setConfigurers(Arrays.<ResourceServerConfigurer> asList(new ResourceServerSecurityAdapter(tokenStore)));
+		resource.setConfigurers(Arrays.<ResourceServerConfigurer> asList(new ResourceServerSecurityAdapter(tokenStore, accessDeniedHandler)));
 		resource.setOrder(-13);
 		return resource;
 	}
@@ -42,7 +46,7 @@ public class ResourceServerListConfiguration {
 				super.setConfigurers(configurers);
 			}
 		};
-		resource.setConfigurers(Arrays.<ResourceServerConfigurer> asList(new ResourceServerProfileAdapter(tokenStore)));
+		resource.setConfigurers(Arrays.<ResourceServerConfigurer> asList(new ResourceServerProfileAdapter(tokenStore, accessDeniedHandler)));
 		resource.setOrder(-14);
 		return resource;
 	}
@@ -54,7 +58,7 @@ public class ResourceServerListConfiguration {
 				super.setConfigurers(configurers);
 			}
 		};
-		resource.setConfigurers(Arrays.<ResourceServerConfigurer> asList(new ResourceServerMasterAdapter(tokenStore)));
+		resource.setConfigurers(Arrays.<ResourceServerConfigurer> asList(new ResourceServerMasterAdapter(tokenStore, accessDeniedHandler)));
 		resource.setOrder(-15);
 		return resource;
 	}
@@ -66,7 +70,7 @@ public class ResourceServerListConfiguration {
 				super.setConfigurers(configurers);
 			}
 		};
-		resource.setConfigurers(Arrays.<ResourceServerConfigurer> asList(new ResourceServerNotificationAdapter(tokenStore)));
+		resource.setConfigurers(Arrays.<ResourceServerConfigurer> asList(new ResourceServerNotificationAdapter(tokenStore, accessDeniedHandler)));
 		resource.setOrder(-16);
 		return resource;
 	}
@@ -78,7 +82,7 @@ public class ResourceServerListConfiguration {
 				super.setConfigurers(configurers);
 			}
 		};
-		resource.setConfigurers(Arrays.<ResourceServerConfigurer> asList(new ResourceServerGeneralAdapter(tokenStore)));
+		resource.setConfigurers(Arrays.<ResourceServerConfigurer> asList(new ResourceServerGeneralAdapter(tokenStore, accessDeniedHandler)));
 		resource.setOrder(-17);
 		return resource;
 	}
@@ -90,7 +94,7 @@ public class ResourceServerListConfiguration {
 				super.setConfigurers(configurers);
 			}
 		};
-		resource.setConfigurers(Arrays.<ResourceServerConfigurer> asList(new ResourceServerFileAdapter(tokenStore)));
+		resource.setConfigurers(Arrays.<ResourceServerConfigurer> asList(new ResourceServerFileAdapter(tokenStore, accessDeniedHandler)));
 		resource.setOrder(-18);
 		return resource;
 	}

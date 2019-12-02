@@ -104,6 +104,9 @@ public class UserEntity extends BaseAuditEntity implements UserDetails {
 	@Column(name = "locale", nullable = false)
 	private String locale = "en-US";
 
+	@Column(name = "theme", nullable = false)
+	private String theme = "locale";
+
 	@Column(name = "authority_default")
 	private String authorityDefault;
 

@@ -4,6 +4,11 @@ import org.springframework.http.HttpStatus;
 
 public enum ErrorCode {
 
+	ERR_XXAKEY(HttpStatus.UNAUTHORIZED),
+	ERR_XXATIMESTAMP(HttpStatus.UNAUTHORIZED),
+	ERR_XXASIGNATURE(HttpStatus.UNAUTHORIZED),
+	ERR_UNAUTHORIZED(HttpStatus.UNAUTHORIZED),
+
 	ERR_SYS0001(HttpStatus.NOT_FOUND),
 	ERR_SYS0404(HttpStatus.INTERNAL_SERVER_ERROR),
 	ERR_SYS0500(HttpStatus.INTERNAL_SERVER_ERROR),
@@ -12,8 +17,8 @@ public enum ErrorCode {
 	
 	ERR_SCR0001(HttpStatus.INTERNAL_SERVER_ERROR),
 	ERR_SCR0002(HttpStatus.INTERNAL_SERVER_ERROR),
-	
-	ERR_WFL0011(HttpStatus.INTERNAL_SERVER_ERROR);
+	ERR_SCR0003(HttpStatus.INTERNAL_SERVER_ERROR),
+	ERR_SCR0004(HttpStatus.INTERNAL_SERVER_ERROR);
 
 	private final HttpStatus status;
 

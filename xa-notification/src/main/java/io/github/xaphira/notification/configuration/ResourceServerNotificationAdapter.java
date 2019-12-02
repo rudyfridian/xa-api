@@ -6,18 +6,21 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 import io.github.xaphira.common.utils.ResourceCode;
 
 public class ResourceServerNotificationAdapter extends ResourceServerConfigurerAdapter {
 
     private TokenStore tokenStore;
+    private AccessDeniedHandler accessDeniedHandler;
     
     private String resourceId = ResourceCode.NOTIFICATION.getResourceId();
     
     public ResourceServerNotificationAdapter() {}
-    public ResourceServerNotificationAdapter(TokenStore tokenStore) {
+    public ResourceServerNotificationAdapter(TokenStore tokenStore, AccessDeniedHandler accessDeniedHandler) {
 		this.tokenStore = tokenStore;
+		this.accessDeniedHandler = accessDeniedHandler;
 	}
 
     @Override
@@ -31,6 +34,7 @@ public class ResourceServerNotificationAdapter extends ResourceServerConfigurerA
     public void configure(HttpSecurity http) throws Exception {
         // @formatter:off
         http
+        .exceptionHandling().accessDeniedHandler(accessDeniedHandler).and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
         .csrf().disable()
         .requestMatchers()
