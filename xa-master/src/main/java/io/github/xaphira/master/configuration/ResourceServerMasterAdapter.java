@@ -6,6 +6,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 import io.github.xaphira.common.utils.ResourceCode;
@@ -14,19 +15,21 @@ public class ResourceServerMasterAdapter extends ResourceServerConfigurerAdapter
 
     private TokenStore tokenStore;
     private AccessDeniedHandler accessDeniedHandler;
+    private AuthenticationEntryPoint authenticationEntryPoint;
     
     private String resourceId = ResourceCode.MASTER.getResourceId();
     
     public ResourceServerMasterAdapter() {}
-    public ResourceServerMasterAdapter(TokenStore tokenStore, AccessDeniedHandler accessDeniedHandler) {
+    public ResourceServerMasterAdapter(TokenStore tokenStore, AccessDeniedHandler accessDeniedHandler, AuthenticationEntryPoint authenticationEntryPoint) {
 		this.tokenStore = tokenStore;
 		this.accessDeniedHandler = accessDeniedHandler;
+		this.authenticationEntryPoint = authenticationEntryPoint;
 	}
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
         // @formatter:off
-        resources.resourceId(resourceId).tokenStore(tokenStore);
+        resources.resourceId(resourceId).tokenStore(tokenStore).authenticationEntryPoint(authenticationEntryPoint);
         // @formatter:on
     }
 

@@ -116,8 +116,7 @@ public class OAuth2ServerConfiguration extends AuthorizationServerConfigurerAdap
 	            OAuth2Exception oAuth2Exception = responseEntity.getBody();
 	            HttpHeaders headers = new HttpHeaders();
 	            headers.setAll(responseEntity.getHeaders().toSingleValueMap());
-	            return new ResponseEntity<>(new CustomOauthException(
-	            		oAuth2Exception.getMessage()),
+				return new ResponseEntity<>(new CustomOauthException(oAuth2Exception.getMessage(), oAuth2Exception.getOAuth2ErrorCode()),
 	            		headers,
 	            		responseEntity.getStatusCode());
 	        }
@@ -130,4 +129,5 @@ public class OAuth2ServerConfiguration extends AuthorizationServerConfigurerAdap
         handler.setExceptionTranslator(exceptionTranslator());
         return handler;
     }
+
 }
