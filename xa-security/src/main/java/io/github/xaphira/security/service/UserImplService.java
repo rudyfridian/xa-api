@@ -6,8 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.time.DateUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,7 +23,7 @@ import io.github.xaphira.security.entity.UserEntity;
 @Service("userService")
 public class UserImplService implements UserDetailsService {
 
-	protected final Log LOGGER = LogFactory.getLog(getClass());
+	protected Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private UserRepo userRepo;

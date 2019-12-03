@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +18,7 @@ import io.github.xaphira.security.entity.MenuEntity;
 @Service("menuService")
 public class MenuImplService {
 
-	protected final Log LOGGER = LogFactory.getLog(getClass());
+	protected Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	@Qualifier("menuRepo")

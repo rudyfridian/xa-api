@@ -1,7 +1,5 @@
 package io.github.xaphira.common.security;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -50,9 +48,9 @@ public class AESEncrypt {
 			encrypted = cipher.doFinal(message.getBytes(CHARSET_TYPE));
 			return toHex(iv) + Base64.getEncoder().encodeToString(encrypted);
 		} catch (InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException e) {
-			throw new NoSuchAlgorithmException(stackTrace(e));
+			throw new NoSuchAlgorithmException(e);
 		} catch (Exception e) {
-			throw new NoSuchAlgorithmException(stackTrace(e));
+			throw new NoSuchAlgorithmException(e);
 		}
 	}
 
@@ -67,11 +65,11 @@ public class AESEncrypt {
 	        byte[] decoded = cipher.doFinal(encrypted);  
 	        return new String(decoded, CHARSET_TYPE);			
 		} catch (InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException e) {
-			throw new NoSuchAlgorithmException(stackTrace(e));
+			throw new NoSuchAlgorithmException(e);
 		} catch (StringIndexOutOfBoundsException e) {
-			throw new NoSuchAlgorithmException(stackTrace(e));
+			throw new NoSuchAlgorithmException(e);
 		} catch (Exception e) {
-			throw new NoSuchAlgorithmException(stackTrace(e));
+			throw new NoSuchAlgorithmException(e);
 		}
 	}
 	
@@ -93,11 +91,5 @@ public class AESEncrypt {
         }
         return sb.toString();
     }
-	
-	private static String stackTrace(Exception exception) {
-		StringWriter errors = new StringWriter();
-		exception.printStackTrace(new PrintWriter(errors));
-		return errors.toString();
-	}
 
 }

@@ -21,13 +21,17 @@ INSERT INTO security.sec_user (user_uuid, username, password, account_enabled, a
 
 --
 -- Dumping data for table oauth_client_details
+-- xa-3rd = secretxa3rd01
+-- xa-core = secretxa01
+-- xa-mobile = secretxa02
+-- xa-private = secretprivatexa01
 --
 
 INSERT INTO security.oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove) VALUES
-('xa-3rd', 'profile,master', 'secretxa3rd01', 'read,write,check_token', 'authorization_code,refresh_token', 'http://xaphira.github.io:69/oauth/secure', 'ROLE_END', 3600, 1800, NULL, '0'),
-('xa-core', 'profile,security,master,notification,general,file,report', 'secretxa01', 'read,write,trust,check_token', 'password,refresh_token', '', 'ROLE_ADMIN,ROLE_RADIOGRAPHER,ROLE_PHYSICIAN,ROLE_END', 7200, 3600, NULL, '1'),
-('xa-mobile', 'profile,security,master', 'secretxa02', 'read,write,check_token', 'password,refresh_token', '', 'ROLE_END', 7200, 3600, NULL, '1'),
-('xa-private', 'profile,security,master,notification,general,file,report', 'secretprivatexa01', 'read,write,trust,check_token', 'client_credentials', '', 'ROLE_PRIVATE', 30, 15, NULL, '1');
+('xa-3rd', 'profile,master', '$2a$13$kh2pUDx33Pj00n63/S0HLOORCRw9/zhxEqdYjnsSRzJIwdRf9FRwe', 'read,write,check_token', 'authorization_code,refresh_token', 'http://xaphira.github.io:69/oauth/secure', 'ROLE_END', 3600, 1800, NULL, '0'),
+('xa-core', 'profile,security,master,notification,general,file,report', '$2a$13$NrN1v1S4p0UsM8zDdvcUUeHqeUwmGbrobBaUwCO.eiIDVsIbIX5gy', 'read,write,trust,check_token', 'password,refresh_token', '', 'ROLE_ADMIN,ROLE_RADIOGRAPHER,ROLE_PHYSICIAN,ROLE_END', 7200, 3600, NULL, '1'),
+('xa-mobile', 'profile,security,master', '$2a$13$jqHw2BuGwJsZXf.eF3XVlOgGxkquOGx4vRDL6ll8UUyr0wEj03YLO', 'read,write,check_token', 'password,refresh_token', '', 'ROLE_END', 7200, 3600, NULL, '1'),
+('xa-private', 'profile,security,master,notification,general,file,report', '$2a$13$5wGOOgm9sN52flJGIdnn3urz9h4xubtDLJnaNmhmRTvqJUiuTJLny', 'read,write,trust,check_token', 'client_credentials', '', 'ROLE_PRIVATE', 30, 15, NULL, '1');
 
 --
 -- Dumping data for table sec_corporate

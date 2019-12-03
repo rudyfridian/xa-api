@@ -1,7 +1,7 @@
 package io.github.xaphira.security.service;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,7 +18,7 @@ import io.github.xaphira.security.entity.UserEntity;
 @Service("changePasswordService")
 public class ChangePasswordImplService {
 
-	protected final Log LOGGER = LogFactory.getLog(getClass());
+	protected Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 	
 	@Value("${xa.signature.aes.secret-key}")
 	private String secretKey;
@@ -36,7 +36,7 @@ public class ChangePasswordImplService {
 		if (this.passwordEncoder.matches((String)password, p_user.getPassword())) {
 			if (newPassword.equals(confirmPassword)) {
 				p_user.setPassword(this.passwordEncoder.encode(newPassword));
-				// userRepo.save(p_user);
+				userRepo.save(p_user);
 				return null;
 			} else {
 				throw new SystemErrorException(ErrorCode.ERR_SCR0003);

@@ -9,8 +9,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +23,14 @@ import io.github.xaphira.common.utils.ErrorCode;
 
 public class BaseControllerException {
 
-	protected Log LOGGER = LogFactory.getLog(this.getClass());
+	protected Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	protected ApiErrorResponse errorResponse;
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiBaseResponse> handleException(HttpServletRequest request, Exception exception) {
-		LOGGER.error(stackTrace(exception));
+		LOGGER.error(exception.getMessage(), exception);
 		
 		Locale locale = Locale.getDefault();
 		String acceptLanguage = request.getHeader(HttpHeaders.ACCEPT_LANGUAGE);
@@ -47,7 +47,7 @@ public class BaseControllerException {
 	
 	@ExceptionHandler(MissingServletRequestPartException.class)
 	public ResponseEntity<ApiBaseResponse> handleMissingServletRequestPartException(HttpServletRequest request, MissingServletRequestPartException exception) {
-		LOGGER.error(stackTrace(exception));
+		LOGGER.error(exception.getMessage(), exception);
 		
 		Locale locale = Locale.getDefault();
 		String acceptLanguage = request.getHeader(HttpHeaders.ACCEPT_LANGUAGE);
@@ -64,7 +64,7 @@ public class BaseControllerException {
 	
 	@ExceptionHandler(NoSuchAlgorithmException.class)
 	public ResponseEntity<ApiBaseResponse> handleEncryptException(HttpServletRequest request, NoSuchAlgorithmException exception) {
-		LOGGER.error(stackTrace(exception));
+		LOGGER.error(exception.getMessage(), exception);
 		
 		Locale locale = Locale.getDefault();
 		String acceptLanguage = request.getHeader(HttpHeaders.ACCEPT_LANGUAGE);
@@ -81,7 +81,7 @@ public class BaseControllerException {
 	
 	@ExceptionHandler(SystemErrorException.class)
 	public ResponseEntity<ApiBaseResponse> handleSystemException(HttpServletRequest request, SystemErrorException exception) {
-		LOGGER.error(stackTrace(exception));
+		LOGGER.error(exception.getMessage(), exception);
 		
 		Locale locale = Locale.getDefault();
 		String acceptLanguage = request.getHeader(HttpHeaders.ACCEPT_LANGUAGE);
@@ -100,6 +100,7 @@ public class BaseControllerException {
 				exception.getErrorCode().getStatus());
 	}
 	
+	@SuppressWarnings("unused")
 	private String stackTrace(Exception exception) {
 		StringWriter errors = new StringWriter();
 		exception.printStackTrace(new PrintWriter(errors));

@@ -13,8 +13,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -30,7 +30,7 @@ import org.springframework.util.Assert;
 
 public class JdbcOauth2TokenStore implements TokenStore {
 
-	private static final Log LOG = LogFactory.getLog(JdbcOauth2TokenStore.class);
+	private static final Logger LOG = LoggerFactory.getLogger(JdbcOauth2TokenStore.class);
 
 	private static final String DEFAULT_ACCESS_TOKEN_INSERT_STATEMENT = "insert into security.oauth_access_token (token_id, token, authentication_id, user_name, client_id, authentication, refresh_token) values (?, ?, ?, ?, ?, ?, ?)";
 

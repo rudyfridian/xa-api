@@ -10,14 +10,14 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
 import org.springframework.security.oauth2.common.util.DefaultJdbcListFactory;
@@ -31,10 +31,9 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
-@SuppressWarnings("deprecation")
 public class JdbcOauth2ClientDetailsService extends JdbcClientDetailsService {
 
-	private static final Log LOGGER = LogFactory.getLog(JdbcOauth2ClientDetailsService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(JdbcOauth2ClientDetailsService.class);
 
 	private JsonMapper mapper = createJsonMapper();
 
@@ -76,7 +75,7 @@ public class JdbcOauth2ClientDetailsService extends JdbcClientDetailsService {
 
 	private String selectClientDetailsSql = DEFAULT_SELECT_STATEMENT;
 
-	private PasswordEncoder passwordEncoder = NoOpPasswordEncoder.getInstance();
+	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(13);
 
 	private final JdbcTemplate jdbcTemplate;
 
