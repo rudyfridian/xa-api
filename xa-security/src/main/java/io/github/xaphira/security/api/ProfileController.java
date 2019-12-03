@@ -16,24 +16,24 @@ import io.github.xaphira.common.aspect.ResponseSuccess;
 import io.github.xaphira.common.exceptions.BaseControllerException;
 import io.github.xaphira.common.http.ApiBaseResponse;
 import io.github.xaphira.common.utils.SuccessCode;
-import io.github.xaphira.feign.dto.security.ChangePasswordDto;
+import io.github.xaphira.feign.dto.security.UserDto;
 import io.github.xaphira.security.entity.UserEntity;
-import io.github.xaphira.security.service.ChangePasswordImplService;
+import io.github.xaphira.security.service.ProfileImplService;
 
 @RestController
 @RequestMapping("/api/profile")
-public class ChangePasswordController extends BaseControllerException {
+public class ProfileController extends BaseControllerException {
 
 	@Autowired
-	private ChangePasswordImplService changePasswordService;
+	private ProfileImplService profileService;
 	
-	@ResponseSuccess(SuccessCode.OK_SCR001)
-	@RequestMapping(value = "/trx/auth/change-password/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ApiBaseResponse> putChangePassword(Authentication authentication,
+	@ResponseSuccess(SuccessCode.OK_SCR004)
+	@RequestMapping(value = "/trx/auth/profile/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ApiBaseResponse> putSettings(Authentication authentication,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale,
-			@RequestBody(required = true) ChangePasswordDto p_dto) throws Exception {
+			@RequestBody(required = true) UserDto p_dto) throws Exception {
 		UserEntity user = (UserEntity) authentication.getPrincipal();
-		return new ResponseEntity<ApiBaseResponse>(changePasswordService.doChangePassword(p_dto, user, locale), HttpStatus.OK);
+		return new ResponseEntity<ApiBaseResponse>(profileService.doUpdateProfile(p_dto, user, locale), HttpStatus.OK);
 	}
 	
 }

@@ -23,6 +23,8 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 import io.github.xaphira.security.service.JdbcOauth2ClientDetailsService;
 import io.github.xaphira.security.service.JdbcOauth2TokenStore;
@@ -44,6 +46,12 @@ public class OAuth2ServerConfiguration extends AuthorizationServerConfigurerAdap
     
     @Autowired
     private UserImplService userDetailsService;
+	
+    @Autowired
+    private AccessDeniedHandler accessDeniedHandler;
+	
+    @Autowired
+    private AuthenticationEntryPoint authenticationEntryPoint;
     
     @Autowired
     private WebResponseExceptionTranslator<OAuth2Exception> exceptionTranslator;
@@ -54,6 +62,7 @@ public class OAuth2ServerConfiguration extends AuthorizationServerConfigurerAdap
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {		
 		super.configure(security);
+		security.authenticationEntryPoint(authenticationEntryPoint).accessDeniedHandler(accessDeniedHandler);
 		security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()").passwordEncoder(passwordEncoder);
 	}
 

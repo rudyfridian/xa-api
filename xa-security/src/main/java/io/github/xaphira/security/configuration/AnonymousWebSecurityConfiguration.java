@@ -18,6 +18,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.endpoint.FrameworkEndpointHandlerMapping;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
 @Order(99)
@@ -32,6 +34,12 @@ public class AnonymousWebSecurityConfiguration extends WebSecurityConfigurerAdap
 
 	@Autowired
 	private List<AuthorizationServerConfigurer> configurers = Collections.emptyList();
+	
+    @Autowired
+    private AccessDeniedHandler accessDeniedHandler;
+	
+    @Autowired
+    private AuthenticationEntryPoint authenticationEntryPoint;
 	
 	@Autowired
 	public void configure(ClientDetailsServiceConfigurer clientDetails) throws Exception {
@@ -58,6 +66,7 @@ public class AnonymousWebSecurityConfiguration extends WebSecurityConfigurerAdap
 		}
 		// @formatter:off
 		http
+			.exceptionHandling().accessDeniedHandler(accessDeniedHandler).and()
         	.authorizeRequests()
 	        	.antMatchers(tokenEndpointPath).fullyAuthenticated()
 	        	.antMatchers(forceEndpointPath).fullyAuthenticated()
@@ -74,6 +83,7 @@ public class AnonymousWebSecurityConfiguration extends WebSecurityConfigurerAdap
     }
 
 	protected void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
+		oauthServer.accessDeniedHandler(accessDeniedHandler).authenticationEntryPoint(authenticationEntryPoint);
 		for (AuthorizationServerConfigurer configurer : configurers) {
 			configurer.configure(oauthServer);
 		}

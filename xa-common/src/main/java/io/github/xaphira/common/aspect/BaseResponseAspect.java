@@ -37,6 +37,7 @@ public class BaseResponseAspect {
 	@Around("execution(org.springframework.http.ResponseEntity<io.github.xaphira.common.http.ApiBaseResponse> *(..)) && "
 			+ "@annotation(io.github.xaphira.common.aspect.ResponseSuccess)")
     public ResponseEntity<ApiBaseResponse> doBaseResponseSuccess(ProceedingJoinPoint pjp) throws Throwable {
+		LOGGER.info("result: {}", pjp.proceed());
 		ApiBaseResponse response = new ApiBaseResponse();
 		Locale locale = Locale.getDefault();
 		ResponseEntity<ApiBaseResponse> result = null;
