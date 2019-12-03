@@ -29,7 +29,11 @@ public class ResourceServerFileAdapter extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
         // @formatter:off
-        resources.resourceId(resourceId).tokenStore(tokenStore).authenticationEntryPoint(authenticationEntryPoint);
+        resources
+	    	.resourceId(resourceId)
+	    	.tokenStore(tokenStore)
+	    	.authenticationEntryPoint(authenticationEntryPoint)
+	    	.accessDeniedHandler(accessDeniedHandler);
         // @formatter:on
     }
 

@@ -1,26 +1,21 @@
 package io.github.xaphira.feign.service;
 
 import java.io.File;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.github.xaphira.feign.dto.file.FileMetadataDto;
-import io.github.xaphira.feign.service.file.FileDicomFeign;
+import io.github.xaphira.feign.service.file.PhotoProfileFeign;
 
 @Service
 public class FileFeignService {
 	
 	@Autowired
-	private FileDicomFeign fileDicomFeign;
+	private PhotoProfileFeign photoProfileFeign;
 	
-	public FileMetadataDto putFileDicomDcm(File dicom, String path, String locale) throws Exception {
-		return fileDicomFeign.putFileDcm(dicom, path, locale).getBody();
-	}
-
-	public List<FileMetadataDto> putFileDicomZip(File zip, String path, String locale) throws Exception {
-		return fileDicomFeign.putFileZip(zip, path, locale).getBody();
+	public FileMetadataDto putPhotoProfile(File photo, String path, String locale) throws Exception {
+		return photoProfileFeign.putPhotoProfile(photo, locale).getBody();
 	}
 
 }

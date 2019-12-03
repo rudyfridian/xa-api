@@ -30,6 +30,12 @@ public class ProfileImplService {
 			p_user.setDescription(p_dto.getDescription());
 			if (p_dto.getName() != null)
 				p_user.setName(p_dto.getName());
+			if (p_dto.getEmail() != null) {
+				if (p_dto.getEmail().matches(PatternGlobal.EMAIL.getRegex())) {
+					p_user.setEmail(p_dto.getEmail());	
+				} else
+					throw new SystemErrorException(ErrorCode.ERR_SCR0008);
+			}
 			if (p_dto.getPhoneNumber() != null) {
 				if (p_dto.getPhoneNumber().matches(PatternGlobal.PHONE_NUMBER.getRegex())) {
 					p_user.setPhoneNumber(p_dto.getPhoneNumber());	
@@ -41,12 +47,6 @@ public class ProfileImplService {
 					p_user.setMobileNumber(p_dto.getMobileNumber());	
 				} else
 					throw new SystemErrorException(ErrorCode.ERR_SCR0007);
-			}
-			if (p_dto.getEmail() != null) {
-				if (p_dto.getEmail().matches(PatternGlobal.EMAIL.getRegex())) {
-					p_user.setEmail(p_dto.getEmail());	
-				} else
-					throw new SystemErrorException(ErrorCode.ERR_SCR0008);
 			}
 			userRepo.save(p_user);
 			return null;

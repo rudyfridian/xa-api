@@ -64,7 +64,7 @@ public class BaseControllerException {
 	
 	@ExceptionHandler(NoSuchAlgorithmException.class)
 	public ResponseEntity<ApiBaseResponse> handleEncryptException(HttpServletRequest request, NoSuchAlgorithmException exception) {
-		LOGGER.error(exception.getMessage(), exception);
+		stackTrace(exception);
 		
 		Locale locale = Locale.getDefault();
 		String acceptLanguage = request.getHeader(HttpHeaders.ACCEPT_LANGUAGE);
@@ -81,7 +81,8 @@ public class BaseControllerException {
 	
 	@ExceptionHandler(SystemErrorException.class)
 	public ResponseEntity<ApiBaseResponse> handleSystemException(HttpServletRequest request, SystemErrorException exception) {
-		LOGGER.error(exception.getMessage(), exception);
+		if (exception.getErrorCode().equals(ErrorCode.ERR_SYS0500))
+			LOGGER.error(exception.getMessage(), exception);
 		
 		Locale locale = Locale.getDefault();
 		String acceptLanguage = request.getHeader(HttpHeaders.ACCEPT_LANGUAGE);
@@ -99,8 +100,7 @@ public class BaseControllerException {
 		return new ResponseEntity<ApiBaseResponse>(baseResponse,
 				exception.getErrorCode().getStatus());
 	}
-	
-	@SuppressWarnings("unused")
+
 	private String stackTrace(Exception exception) {
 		StringWriter errors = new StringWriter();
 		exception.printStackTrace(new PrintWriter(errors));
