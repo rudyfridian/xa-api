@@ -38,7 +38,7 @@ public class PhotoProfileController extends BaseControllerException {
 	
     @Value("${xa.file.path.image.profile}")
     protected String path;
-	
+
 	@RequestMapping(value = "/trx/auth/photo-profile/v.1", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)	
 	public ResponseEntity<FileMetadataDto> putPhotoProfile(Authentication authentication,
 			@RequestPart @Valid MultipartFile photo,
@@ -58,6 +58,11 @@ public class PhotoProfileController extends BaseControllerException {
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
 		String path = this.path.concat(authentication.getName());
 		return new ResponseEntity<Resource>(this.fileGenericService.getFile(checksum, path), HttpStatus.OK);
+	}
+	
+	@Override
+	protected void rollback() {
+		super.rollback();
 	}
 	
 }

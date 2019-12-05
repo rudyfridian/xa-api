@@ -28,11 +28,14 @@ public class BaseControllerException {
 	
 	@Autowired
 	protected ApiErrorResponse errorResponse;
+	
+	protected void rollback() {}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiBaseResponse> handleException(HttpServletRequest request, Exception exception) throws Exception {
 		System.err.println(exception.getClass().getName());
 		if (exception instanceof FeignThrowException) {
+			this.rollback();
 			throw exception;
 		}
 		LOGGER.error(exception.getMessage(), exception);
