@@ -34,7 +34,7 @@ public class BearerRequestInterceptor implements RequestInterceptor {
 			headers.put("Authorization", Arrays.asList(String.format("%s %s",tokenType,tokenValue)));
 			headers.put("X-XA-Key", Arrays.asList(this.feignSignatureInterceptor.getPublicKey()));
 			headers.put("X-XA-Timestamp", Arrays.asList(this.feignSignatureInterceptor.getTimestamp()));
-			// headers.put("X-XA-Signature", Arrays.asList(this.feignSignatureInterceptor.getSignature(requestTemplate.path(), tokenValue)));
+			headers.put("X-XA-Signature", Arrays.asList(this.feignSignatureInterceptor.getSignature(requestTemplate.path(), tokenValue)));
 			headers.put("X-XA-Signature", Arrays.asList("test"));
 	        requestTemplate.headers(headers);
 		}
