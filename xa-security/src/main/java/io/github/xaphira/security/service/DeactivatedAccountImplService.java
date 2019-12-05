@@ -29,7 +29,8 @@ public class DeactivatedAccountImplService {
 	private PasswordEncoder passwordEncoder;
 
 	public ApiBaseResponse doDeactivate(String password, UserEntity p_user, String p_locale) throws Exception {
-		if (p_user.getId() != null) {
+		if (p_user.getUsername() != null) {
+			p_user = this.userRepo.findByUsername(p_user.getUsername());
 			password = AESEncrypt.decrypt(this.secretKey, password);
 			if (this.passwordEncoder.matches(password, p_user.getPassword())) {
 				p_user.setActive(false);

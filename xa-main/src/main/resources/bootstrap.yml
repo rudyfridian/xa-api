@@ -62,12 +62,59 @@ eureka:
   client:
     enabled: false
 
+
+feign:
+  compression:
+    request:
+      enabled: true
+    response:
+      enabled: true
+  hystrix:
+    enabled: true
+
+  client:
+    config:
+      xa-file:
+        connectTimeout: 30000
+        readTimeout: 30000
+        loggerLevel: full
+        errorDecoder: io.github.xaphira.feign.decoder.FeignErrorDecoder
+      xa-profile:
+        connectTimeout: 30000
+        readTimeout: 30000
+        loggerLevel: full
+        errorDecoder: io.github.xaphira.feign.decoder.FeignErrorDecoder
+
+hystrix:
+  shareSecurityContext: true
+  command:
+    xa-file:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000
+    xa-profile:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000
+
 ribbon:
   eureka:
     enabled: false
 
-xa-master:
+xa-file:
   ribbon:
+    ReadTimeout: 30000
+    MaxAutoRetries: 3
+    OkToRetryOnAllOperations: false
+    listOfServers: localhost:8085
+
+xa-profile:
+  ribbon:
+    ReadTimeout: 30000
+    MaxAutoRetries: 3
+    OkToRetryOnAllOperations: false
     listOfServers: localhost:8085
 
 security:

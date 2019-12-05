@@ -38,8 +38,9 @@ public class FileUtils {
 	
 	private ZipInputStream zis;
 
-	public void write(String filePath, byte[] fileContent) throws Exception {
-		RandomAccessFile stream = new RandomAccessFile(filePath, "rw");
+	public void write(String path, String fileName, byte[] fileContent) throws Exception {
+		new File(path).mkdir();
+		RandomAccessFile stream = new RandomAccessFile(new File(path, fileName), "rw");
 		FileChannel channel = stream.getChannel();
 		FileLock lock = null;
 		try {
@@ -60,14 +61,14 @@ public class FileUtils {
 	public String writeFile(String filePath, byte[] fileContent) throws Exception {
 		String checksum = fileChecksum("MD5", fileContent);
 		filePath = getFilePathString(checksum, filePath, false);
-		write(filePath, fileContent);
+		write(filePath, checksum, fileContent);
 		return filePath;
 	}
 
 	public FileMetadataDto writeFile(String filePath, String filename, byte[] fileContent) throws Exception {
 		String checksum = fileChecksum("MD5", fileContent); 
 		String fileFullPath = getFilePathString(checksum, filePath, false);
-		write(fileFullPath, fileContent);
+		write(filePath, checksum, fileContent);
 		FileChannel fileChannel = FileChannel.open(Paths.get(fileFullPath));
 		long fileSize = fileChannel.size();
 		FileMetadataDto fileMetadata = new FileMetadataDto();
@@ -86,7 +87,7 @@ public class FileUtils {
 	public FileMetadataDto writeFile(String filePath, MultipartFile multipart) throws Exception {
 		String checksum = fileChecksum("MD5", multipart.getBytes()); 
 		String fileFullPath = getFilePathString(checksum, filePath, false);
-		write(fileFullPath, multipart.getBytes());
+		write(filePath, checksum, multipart.getBytes());
 		FileMetadataDto fileMetadata = new FileMetadataDto();
 		fileMetadata.setChecksum(checksum);
 		fileMetadata.setFullPath(fileFullPath);
@@ -148,7 +149,7 @@ public class FileUtils {
 	
 	public List<FileMetadataDto> extract(String filePath, MultipartFile multipart) throws Exception {
 		String zipFullPath = filePath+"/"+multipart.getOriginalFilename();
-		write(zipFullPath, multipart.getBytes());
+		write(filePath, multipart.getOriginalFilename(), multipart.getBytes());
 		zis = new ZipInputStream(new FileInputStream(zipFullPath));
 		ZipEntry zipEntry = null;
 		List<FileMetadataDto> fileMetadatas = new ArrayList<FileMetadataDto>();
@@ -165,7 +166,7 @@ public class FileUtils {
 			String fileName = zipEntry.getName();
 			String checksum = fileChecksum("MD5", out.toByteArray());
 			String fileFullPath = getFilePathString(checksum, filePath, false);
-			write(fileFullPath, out.toByteArray());
+			write(filePath, checksum, out.toByteArray());
 			FileChannel fileChannel = FileChannel.open(Paths.get(fileFullPath));
 			long fileSize = fileChannel.size();
 			FileMetadataDto fileMetadata = new FileMetadataDto();

@@ -22,7 +22,8 @@ public class ProfileImplService {
 	private UserRepo userRepo;
 
 	public ApiBaseResponse doUpdateProfile(UserDto p_dto, UserEntity p_user, String p_locale) throws Exception {
-		if (p_user.getId() != null) {
+		if (p_user.getUsername() != null) {
+			p_user = this.userRepo.findByUsername(p_user.getUsername());
 			p_user.setAddress(p_dto.getAddress());
 			p_user.setCity(p_dto.getCity());
 			p_user.setProvince(p_dto.getProvince());
@@ -48,6 +49,16 @@ public class ProfileImplService {
 				} else
 					throw new SystemErrorException(ErrorCode.ERR_SCR0007);
 			}
+			userRepo.save(p_user);
+			return null;
+		} else
+			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
+	}
+
+	public ApiBaseResponse doUpdatePhoto(String url, UserEntity p_user, String p_locale) throws Exception {
+		if (p_user.getUsername() != null) {
+			p_user = this.userRepo.findByUsername(p_user.getUsername());
+			p_user.setImage(url);
 			userRepo.save(p_user);
 			return null;
 		} else

@@ -21,7 +21,8 @@ public class SettingsImplService {
 	private UserRepo userRepo;
 
 	public ApiBaseResponse doUpdateSettings(SettingsDto p_dto, UserEntity p_user, String p_locale) throws Exception {
-		if (p_user.getId() != null) {
+		if (p_user.getUsername() != null) {
+			p_user = this.userRepo.findByUsername(p_user.getUsername());
 			p_user.setTheme(p_dto.getTheme());
 			p_user.setLocale(p_dto.getLocale());
 			userRepo.save(p_user);

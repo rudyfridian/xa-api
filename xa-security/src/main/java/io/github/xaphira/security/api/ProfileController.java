@@ -29,11 +29,20 @@ public class ProfileController extends BaseControllerException {
 	
 	@ResponseSuccess(SuccessCode.OK_SCR004)
 	@RequestMapping(value = "/trx/auth/profile/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ApiBaseResponse> putSettings(Authentication authentication,
+	public ResponseEntity<ApiBaseResponse> putProfile(Authentication authentication,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale,
 			@RequestBody(required = true) UserDto p_dto) throws Exception {
 		UserEntity user = (UserEntity) authentication.getPrincipal();
 		return new ResponseEntity<ApiBaseResponse>(profileService.doUpdateProfile(p_dto, user, locale), HttpStatus.OK);
+	}
+	
+	@ResponseSuccess(SuccessCode.OK_SCR004)
+	@RequestMapping(value = "/trx/auth/photo-profile/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ApiBaseResponse> putPhotoProfile(Authentication authentication,
+			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale,
+			@RequestBody(required = true) String url) throws Exception {
+		UserEntity user = (UserEntity) authentication.getPrincipal();
+		return new ResponseEntity<ApiBaseResponse>(profileService.doUpdatePhoto(url, user, locale), HttpStatus.OK);
 	}
 	
 }

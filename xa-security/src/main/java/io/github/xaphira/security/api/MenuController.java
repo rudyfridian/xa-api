@@ -3,6 +3,7 @@ package io.github.xaphira.security.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class MenuController extends BaseControllerException {
 	
 	@RequestMapping(value = "/vw/get/menu/v.1", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<MenuDto>> getMenuI18n(Authentication authentication,
-			@RequestHeader(name = "Accept-Language", required = false) String locale) throws Exception {
+			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
 		UserEntity user = (UserEntity) authentication.getPrincipal();
 		return new ResponseEntity<List<MenuDto>>(menuService.loadMenuByRole(user.getAuthorityDefault(), locale), HttpStatus.OK);
 	}

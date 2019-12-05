@@ -31,7 +31,8 @@ public class ChangePasswordImplService {
 	private PasswordEncoder passwordEncoder;
 
 	public ApiBaseResponse doChangePassword(ChangePasswordDto p_dto, UserEntity p_user, String p_locale) throws Exception {
-		if (p_user.getId() != null) {
+		if (p_user.getUsername() != null) {
+			p_user = this.userRepo.findByUsername(p_user.getUsername());
 			String password = AESEncrypt.decrypt(this.secretKey, p_dto.getPassword());
 			String newPassword = AESEncrypt.decrypt(this.secretKey, p_dto.getNewPassword());
 			String confirmPassword = AESEncrypt.decrypt(this.secretKey, p_dto.getConfirmPassword());

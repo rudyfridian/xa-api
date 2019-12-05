@@ -7,4 +7,6 @@ import io.github.xaphira.file.entity.FileMetadataEntity;
 
 public interface FileMetadataRepo extends JpaRepository<FileMetadataEntity, String>, JpaSpecificationExecutor<FileMetadataEntity> {
 
+	FileMetadataEntity findByChecksum(String checksum);
+	
 }

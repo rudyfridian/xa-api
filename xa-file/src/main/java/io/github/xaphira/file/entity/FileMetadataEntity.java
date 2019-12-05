@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
 @Entity
-@Table(name="mst_file_metadata", schema = SchemaDatabase.MASTER)
+@Table(name="file_metadata", schema = SchemaDatabase.FILE)
 public class FileMetadataEntity extends BaseAuditEntity {
 
 	private static final long serialVersionUID = 657390142518153080L;
