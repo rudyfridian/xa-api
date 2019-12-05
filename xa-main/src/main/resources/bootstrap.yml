@@ -78,16 +78,19 @@ feign:
         connectTimeout: 30000
         readTimeout: 30000
         loggerLevel: full
-        errorDecoder: io.github.xaphira.feign.decoder.FeignErrorDecoder
       xa-profile:
         connectTimeout: 30000
         readTimeout: 30000
         loggerLevel: full
-        errorDecoder: io.github.xaphira.feign.decoder.FeignErrorDecoder
 
 hystrix:
   shareSecurityContext: true
   command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000
     xa-file:
       execution:
         isolation:

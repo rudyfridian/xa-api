@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 import io.github.xaphira.common.utils.ErrorCode;
 
-public class SystemErrorException extends Exception {
+public class FeignThrowException extends Exception {
 
 	/**
 	 * 
@@ -14,36 +14,36 @@ public class SystemErrorException extends Exception {
 	private ErrorCode errorCode;
 	private HttpStatus status;
 
-	public SystemErrorException() {
+	public FeignThrowException() {
 		super();
 	}
 
-	public SystemErrorException(String message, Throwable cause) {
+	public FeignThrowException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public SystemErrorException(String message) {
+	public FeignThrowException(String message) {
 		super(message);
 	}
 
-	public SystemErrorException(ErrorCode errorCode) {
+	public FeignThrowException(ErrorCode errorCode) {
 		super(errorCode.name());
 		this.errorCode = errorCode;
 	}
 
 
-	public SystemErrorException(HttpStatus status) {
+	public FeignThrowException(HttpStatus status) {
 		super(status.name());
 		this.status = status;
 	}
 
-	public SystemErrorException(ErrorCode errorCode, Object[] params) {
+	public FeignThrowException(ErrorCode errorCode, Object[] params) {
 		super(errorCode.name());
 		this.errorCode = errorCode;
 		this.params = params;
 	}
 
-	public SystemErrorException(Throwable cause) {
+	public FeignThrowException(Throwable cause) {
 		super(cause);
 	}
 

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -38,12 +39,12 @@ class PhotoProfileFeignFallbackFactory implements FallbackFactory<PhotoProfileFe
 		return new PhotoProfileFeign() {
 			@Override
 			public ResponseEntity<ApiBaseResponse> putPhotoProfile(Map<String, String> url, String locale) throws Exception {
-				LOGGER.info(String.format("fallback reason was: %s", cause.getMessage()));
 				if (cause instanceof FeignException) {
 					FeignException fe = ((FeignException)cause);
-					LOGGER.info("Response Status Code : {}, and Response Body : {}", fe.status(), fe.contentUTF8());
+					LOGGER.error("Error took place when using Feign client to send HTTP Request. Status code : {} , methodKey : {}", fe.status(), fe.getMessage());
+					return new ResponseEntity<ApiBaseResponse>(HttpStatus.valueOf(fe.status()));
 				}
-				return null;
+				return new ResponseEntity<ApiBaseResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		};
 	}		

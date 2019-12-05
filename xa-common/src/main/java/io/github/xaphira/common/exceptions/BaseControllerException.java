@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
@@ -29,7 +30,11 @@ public class BaseControllerException {
 	protected ApiErrorResponse errorResponse;
 
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ApiBaseResponse> handleException(HttpServletRequest request, Exception exception) {
+	public ResponseEntity<ApiBaseResponse> handleException(HttpServletRequest request, Exception exception) throws Exception {
+		System.err.println(exception.getClass().getName());
+		if (exception instanceof FeignThrowException) {
+			throw exception;
+		}
 		LOGGER.error(exception.getMessage(), exception);
 		
 		Locale locale = Locale.getDefault();
@@ -81,24 +86,33 @@ public class BaseControllerException {
 	
 	@ExceptionHandler(SystemErrorException.class)
 	public ResponseEntity<ApiBaseResponse> handleSystemException(HttpServletRequest request, SystemErrorException exception) {
-		if (exception.getErrorCode().equals(ErrorCode.ERR_SYS0500))
-			LOGGER.error(exception.getMessage(), exception);
-		
 		Locale locale = Locale.getDefault();
 		String acceptLanguage = request.getHeader(HttpHeaders.ACCEPT_LANGUAGE);
 		if(acceptLanguage != null)
 			locale = Locale.forLanguageTag(acceptLanguage);	
+		String errorCode = null;
+		String errorDescription = null;
+		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+		
+		if (exception.getErrorCode() != null) {
+			if (exception.getErrorCode().equals(ErrorCode.ERR_SYS0500))
+				LOGGER.error(exception.getMessage(), exception);
+			status = exception.getErrorCode().getStatus();
+			errorCode = exception.getErrorCode().name();
+			if(exception.getParams() != null)
+				errorDescription = errorResponse.errorDescriptionResponse(errorCode, locale, exception.getParams());	
+			else
+				errorDescription = errorResponse.errorDescriptionResponse(errorCode, locale, exception.getParams());
+		} else if (exception.getStatus() != null) {
+			errorCode = exception.getStatus().name();
+			errorDescription = exception.getStatus().getReasonPhrase();
+		}
 		Map<String, String> respStatusMessage = new HashMap<String, String>();
-		if(exception.getParams() != null) {
-			String err = errorResponse.errorResponse(exception.getErrorCode(), locale, exception.getParams());
-			respStatusMessage.put(exception.getErrorCode().name(), err);
-		} else
-			respStatusMessage.put(exception.getErrorCode().name(), errorResponse.errorDescriptionResponse(exception.getErrorCode(), locale));
+		respStatusMessage.put(errorCode, errorDescription);
 		ApiBaseResponse baseResponse = new ApiBaseResponse();
-		baseResponse.setRespStatusCode(exception.getErrorCode().name());
+		baseResponse.setRespStatusCode(errorCode);
 		baseResponse.setRespStatusMessage(respStatusMessage);
-		return new ResponseEntity<ApiBaseResponse>(baseResponse,
-				exception.getErrorCode().getStatus());
+		return new ResponseEntity<ApiBaseResponse>(baseResponse, status);
 	}
 
 	private String stackTrace(Exception exception) {

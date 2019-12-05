@@ -1,14 +1,22 @@
 package io.github.xaphira.feign.configuration;
 
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
+import org.springframework.cloud.openfeign.support.ResponseEntityDecoder;
+import org.springframework.cloud.openfeign.support.SpringDecoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import feign.Logger;
 import feign.RequestInterceptor;
 import feign.Retryer;
-import io.github.xaphira.feign.decoder.FeignErrorDecoder;
+import feign.codec.Decoder;
 
 @Configuration
 public class FeignConfiguration {
@@ -20,12 +28,14 @@ public class FeignConfiguration {
 	public RequestInterceptor oauth2FeignRequestInterceptor() {
 		return new BearerRequestInterceptor(feignSignatureInterceptor);
 	}
-	
+
 	@Primary
-	@Bean
-    public FeignErrorDecoder errorDecoder() {
-        return new FeignErrorDecoder();
-	}
+    @Bean
+    public Decoder feignDecoder() {
+        HttpMessageConverter<?> jacksonConverter = new MappingJackson2HttpMessageConverter(customObjectMapper());
+        ObjectFactory<HttpMessageConverters> objectFactory = () -> new HttpMessageConverters(jacksonConverter);
+        return new ResponseEntityDecoder(new SpringDecoder(objectFactory));
+    }
 	
     @Bean
     public Retryer retryer() {
@@ -35,6 +45,12 @@ public class FeignConfiguration {
     @Bean
     Logger.Level feignLoggerLevel() {
         return Logger.Level.FULL;
+    }
+
+    public ObjectMapper customObjectMapper(){
+        ObjectMapper objectMapper = new ObjectMapper();
+        //Customize as much as you want
+        return objectMapper;
     }
 
 	/*@Bean
