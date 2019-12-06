@@ -33,9 +33,7 @@ public class BaseControllerException {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiBaseResponse> handleException(HttpServletRequest request, Exception exception) throws Exception {
-		System.err.println(exception.getClass().getName());
-		if (exception instanceof FeignThrowException) {
-			this.rollback();
+		if (exception instanceof FeignAuthException) {
 			throw exception;
 		}
 		LOGGER.error(exception.getMessage(), exception);
@@ -85,6 +83,12 @@ public class BaseControllerException {
 		baseResponse.setRespStatusMessage(respStatusMessage);
 		return new ResponseEntity<ApiBaseResponse>(baseResponse,
 				ErrorCode.ERR_SCR0004.getStatus());
+	}
+
+	@ExceptionHandler(FeignThrowException.class)
+	public ResponseEntity<ApiBaseResponse> handleFeignThrowException(HttpServletRequest request, Exception exception) throws Exception {
+		FeignThrowException e = (FeignThrowException) exception;
+		return new ResponseEntity<ApiBaseResponse>((ApiBaseResponse) e.getResponse(), e.getStatus());
 	}
 	
 	@ExceptionHandler(SystemErrorException.class)

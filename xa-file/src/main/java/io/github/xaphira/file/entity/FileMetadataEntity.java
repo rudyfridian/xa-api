@@ -34,7 +34,7 @@ public class FileMetadataEntity extends BaseAuditEntity {
     @Column(name = "file_metadata_uuid", nullable = false, unique=true)
 	private String id;	
 	
-	@Column(name="file_checksum")
+	@Column(name="file_checksum", nullable = false, unique=true)
 	private String checksum;	
 	
 	@Column(name="file_full_name")

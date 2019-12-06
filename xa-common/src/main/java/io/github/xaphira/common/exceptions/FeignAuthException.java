@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 import io.github.xaphira.common.utils.ErrorCode;
 
-public class FeignThrowException extends Exception {
+public class FeignAuthException extends Exception {
 
 	/**
 	 * 
@@ -13,48 +13,36 @@ public class FeignThrowException extends Exception {
 	private Object[] params;
 	private ErrorCode errorCode;
 	private HttpStatus status;
-	private Object response;
 
-	public FeignThrowException() {
+	public FeignAuthException() {
 		super();
 	}
 
-	public FeignThrowException(String message, Throwable cause) {
+	public FeignAuthException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public FeignThrowException(String message) {
+	public FeignAuthException(String message) {
 		super(message);
 	}
 
-	public FeignThrowException(ErrorCode errorCode) {
+	public FeignAuthException(ErrorCode errorCode) {
 		super(errorCode.name());
 		this.errorCode = errorCode;
 	}
 
-	public FeignThrowException(HttpStatus status) {
+	public FeignAuthException(HttpStatus status) {
 		super(status.name());
 		this.status = status;
 	}
 
-	public FeignThrowException(ErrorCode errorCode, Object[] params) {
+	public FeignAuthException(ErrorCode errorCode, Object[] params) {
 		super(errorCode.name());
 		this.errorCode = errorCode;
 		this.params = params;
 	}
 
-	public FeignThrowException(Object response, HttpStatus status) {
-		super(response.toString());
-		this.response = response;
-		this.status = status;
-	}
-
-	public FeignThrowException(Object response) {
-		super(response.toString());
-		this.response = response;
-	}
-
-	public FeignThrowException(Throwable cause) {
+	public FeignAuthException(Throwable cause) {
 		super(cause);
 	}
 
@@ -72,14 +60,6 @@ public class FeignThrowException extends Exception {
 
 	public void setStatus(HttpStatus status) {
 		this.status = status;
-	}
-
-	public Object getResponse() {
-		return response;
-	}
-
-	public void setResponse(Object response) {
-		this.response = response;
 	}
 
 }

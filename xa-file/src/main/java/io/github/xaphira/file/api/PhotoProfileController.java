@@ -1,8 +1,5 @@
 package io.github.xaphira.file.api;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,32 +20,29 @@ import org.springframework.web.multipart.MultipartFile;
 
 import io.github.xaphira.common.exceptions.BaseControllerException;
 import io.github.xaphira.feign.dto.file.FileMetadataDto;
-import io.github.xaphira.feign.service.ProfileFeignService;
 import io.github.xaphira.file.service.FileGenericImplService;
+import io.github.xaphira.file.service.PhotoProfileImplService;
 
 @RestController
 @RequestMapping("/api/file")
 public class PhotoProfileController extends BaseControllerException {
 
 	@Autowired
-	private FileGenericImplService fileGenericService;
+	private PhotoProfileImplService photoProfileService;
 
 	@Autowired
-	private ProfileFeignService profileFeignService;
+	private FileGenericImplService fileGenericService;
 	
     @Value("${xa.file.path.image.profile}")
     protected String path;
 
 	@RequestMapping(value = "/trx/auth/photo-profile/v.1", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)	
-	public ResponseEntity<FileMetadataDto> putPhotoProfile(Authentication authentication,
+	public ResponseEntity<?> putPhotoProfile(Authentication authentication,
 			@RequestPart @Valid MultipartFile photo,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
-		String path = this.path.concat(authentication.getName());
-		this.fileGenericService.removeFile(path);
-		FileMetadataDto fileMetaData = this.fileGenericService.putFile(path, photo.getOriginalFilename(), photo.getBytes());
-		Map<String, String> url = new HashMap<String, String>();
-		url.put("url", fileMetaData.getChecksum());
-		this.profileFeignService.putPhotoProfile(url, locale);
+		String username = authentication.getName();
+		String path = this.path.concat(username);
+		FileMetadataDto fileMetaData = this.photoProfileService.putFile(path, photo.getOriginalFilename(), photo.getBytes(), locale);
 		return new ResponseEntity<FileMetadataDto>(fileMetaData, HttpStatus.OK);
 	}
 	
@@ -58,11 +52,6 @@ public class PhotoProfileController extends BaseControllerException {
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
 		String path = this.path.concat(authentication.getName());
 		return new ResponseEntity<Resource>(this.fileGenericService.getFile(checksum, path), HttpStatus.OK);
-	}
-	
-	@Override
-	protected void rollback() {
-		super.rollback();
 	}
 	
 }

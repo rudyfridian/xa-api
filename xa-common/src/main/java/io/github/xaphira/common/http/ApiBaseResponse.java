@@ -1,27 +1,27 @@
 package io.github.xaphira.common.http;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class ApiBaseResponse {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
+public class ApiBaseResponse implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5750204327237137628L;
 	private String respStatusCode = "success";
 	private Map<String, String> respStatusMessage = new TreeMap<String, String>();
-
-	public String getRespStatusCode() {
-		return respStatusCode;
-	}
-
-	public void setRespStatusCode(String respStatusCode) {
-		this.respStatusCode = respStatusCode;
-	}
-
-	public Map<String, String> getRespStatusMessage() {
-		return respStatusMessage;
-	}
-
-	public void setRespStatusMessage(Map<String, String> respStatusMessage) {
-		this.respStatusMessage = respStatusMessage;
-	}
 
 }

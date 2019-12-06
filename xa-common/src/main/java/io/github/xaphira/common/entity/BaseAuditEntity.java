@@ -43,7 +43,7 @@ public class BaseAuditEntity implements Serializable {
     protected String createdBy;
 
 	@Temporal(TemporalType.TIMESTAMP)
-    @Column(name="modified_date", insertable = true, updatable=true)
+    @Column(name="modified_date")
     @LastModifiedDate
     protected Date modifiedDate;
 

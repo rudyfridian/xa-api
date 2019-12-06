@@ -7,12 +7,12 @@ import org.springframework.cloud.openfeign.support.ResponseEntityDecoder;
 import org.springframework.cloud.openfeign.support.SpringDecoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import feign.Feign;
 import feign.Logger;
 import feign.RequestInterceptor;
 import feign.Retryer;
@@ -25,13 +25,21 @@ public class FeignConfiguration {
 	private FeignSignatureInterceptor feignSignatureInterceptor;
 	
 	@Bean
+	public Feign.Builder feignBuilder(Retryer retryer) {
+	    return Feign.builder()
+	    		.requestInterceptor(oauth2FeignRequestInterceptor())
+	    		.decoder(springDecoder())
+	            .retryer(retryer)
+	            .logLevel(feignLoggerLevel());
+	}
+	
+	@Bean
 	public RequestInterceptor oauth2FeignRequestInterceptor() {
 		return new BearerRequestInterceptor(feignSignatureInterceptor);
 	}
 
-	@Primary
     @Bean
-    public Decoder feignDecoder() {
+    public Decoder springDecoder() {
         HttpMessageConverter<?> jacksonConverter = new MappingJackson2HttpMessageConverter(customObjectMapper());
         ObjectFactory<HttpMessageConverters> objectFactory = () -> new HttpMessageConverters(jacksonConverter);
         return new ResponseEntityDecoder(new SpringDecoder(objectFactory));
@@ -49,7 +57,6 @@ public class FeignConfiguration {
 
     public ObjectMapper customObjectMapper(){
         ObjectMapper objectMapper = new ObjectMapper();
-        //Customize as much as you want
         return objectMapper;
     }
 

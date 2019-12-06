@@ -74,7 +74,7 @@ public class FileGenericImplService {
 		}
 	}
 	
-	public void removeFile(String path) throws Exception {
+	public void removeAllFiles(String path) throws Exception {
 		try {
 			String[] files = new File(path).list();
 			for(String s: files){
