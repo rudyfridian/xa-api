@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.github.xaphira.common.exceptions.SystemErrorException;
 import io.github.xaphira.common.http.ApiBaseResponse;
@@ -30,6 +31,7 @@ public class ChangePasswordImplService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@Transactional
 	public ApiBaseResponse doChangePassword(ChangePasswordDto p_dto, UserEntity p_user, String p_locale) throws Exception {
 		if (p_user.getUsername() != null) {
 			p_user = this.userRepo.findByUsername(p_user.getUsername());

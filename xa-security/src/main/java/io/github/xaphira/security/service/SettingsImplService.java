@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.github.xaphira.common.exceptions.SystemErrorException;
 import io.github.xaphira.common.http.ApiBaseResponse;
@@ -20,6 +21,7 @@ public class SettingsImplService {
 	@Autowired
 	private UserRepo userRepo;
 
+	@Transactional
 	public ApiBaseResponse doUpdateSettings(SettingsDto p_dto, UserEntity p_user, String p_locale) throws Exception {
 		if (p_user.getUsername() != null) {
 			p_user = this.userRepo.findByUsername(p_user.getUsername());

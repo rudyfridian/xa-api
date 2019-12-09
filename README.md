@@ -1,2 +1,2 @@
 # xa-api
-Web Service Application
+Web Service Monolith Application

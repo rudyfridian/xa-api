@@ -61,6 +61,7 @@ public class ProfileImplService implements ProfileService {
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
 	}
 
+	@Transactional
 	@Override
 	public void doUpdatePhoto(Map<String, String> url, Authentication authentication, String locale) throws Exception {
 		UserEntity user = (UserEntity) authentication.getPrincipal();
