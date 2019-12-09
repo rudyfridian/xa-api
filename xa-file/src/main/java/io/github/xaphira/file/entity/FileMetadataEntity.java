@@ -31,10 +31,10 @@ public class FileMetadataEntity extends BaseAuditEntity {
 	@Id
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
 	@GeneratedValue(generator = "uuid")
-    @Column(name = "file_metadata_uuid", nullable = false, unique=true)
+    @Column(name = "file_metadata_uuid", nullable = false, unique = true)
 	private String id;	
 	
-	@Column(name="file_checksum", nullable = false, unique=true)
+	@Column(name="file_checksum", nullable = false, unique = true)
 	private String checksum;	
 	
 	@Column(name="file_full_name")

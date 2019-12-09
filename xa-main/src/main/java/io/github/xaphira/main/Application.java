@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableResourceServer
 @EnableConfigurationProperties
 @EnableFeignClients(basePackages = {"io.github.xaphira.feign"})
-@EnableJpaRepositories(basePackages = { "io.github.xaphira.*.dao" })
+@EnableJpaRepositories(basePackages = { "io.github.xaphira.*.dao", "io.github.xaphira.*.service" })
 public class Application extends SpringBootServletInitializer {
 
 	private static final Logger LOG = LoggerFactory.getLogger(Application.class);

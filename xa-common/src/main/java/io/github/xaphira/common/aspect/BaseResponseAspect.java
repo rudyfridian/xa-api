@@ -37,10 +37,11 @@ public class BaseResponseAspect {
 	@Around("execution(org.springframework.http.ResponseEntity<io.github.xaphira.common.http.ApiBaseResponse> *(..)) && "
 			+ "@annotation(io.github.xaphira.common.aspect.ResponseSuccess)")
     public ResponseEntity<ApiBaseResponse> doBaseResponseSuccess(ProceedingJoinPoint pjp) throws Throwable {
-		LOGGER.info("result: {}", pjp.proceed());
-		ApiBaseResponse response = new ApiBaseResponse();
+		ResponseEntity<ApiBaseResponse> result = extracted(pjp);
+		ApiBaseResponse response = new ApiBaseResponse(); 
+		if(result.getBody() != null)
+			response = result.getBody();
 		Locale locale = Locale.getDefault();
-		ResponseEntity<ApiBaseResponse> result = null;
 		try {
 			final Signature signature = pjp.getSignature();
 		    if(signature instanceof MethodSignature){
@@ -63,5 +64,10 @@ public class BaseResponseAspect {
 		}
         return result;
     }
+
+	@SuppressWarnings("unchecked")
+	private ResponseEntity<ApiBaseResponse> extracted(ProceedingJoinPoint pjp) throws Throwable {
+		return (ResponseEntity<ApiBaseResponse>)pjp.proceed();
+	}
 
 }

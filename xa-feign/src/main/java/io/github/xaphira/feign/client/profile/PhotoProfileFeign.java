@@ -1,4 +1,4 @@
-package io.github.xaphira.feign.service.profile;
+package io.github.xaphira.feign.client.profile;
 
 import java.util.Map;
 

@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import io.github.xaphira.common.aspect.ResponseSuccess;
 import io.github.xaphira.common.exceptions.BaseControllerException;
-import io.github.xaphira.feign.dto.file.FileMetadataDto;
+import io.github.xaphira.common.http.ApiBaseResponse;
+import io.github.xaphira.common.utils.SuccessCode;
 import io.github.xaphira.file.service.FileGenericImplService;
 import io.github.xaphira.file.service.PhotoProfileImplService;
 
@@ -36,14 +38,15 @@ public class PhotoProfileController extends BaseControllerException {
     @Value("${xa.file.path.image.profile}")
     protected String path;
 
+    @ResponseSuccess(SuccessCode.OK_SCR005)
 	@RequestMapping(value = "/trx/auth/photo-profile/v.1", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)	
-	public ResponseEntity<?> putPhotoProfile(Authentication authentication,
+	public ResponseEntity<ApiBaseResponse> putPhotoProfile(Authentication authentication,
 			@RequestPart @Valid MultipartFile photo,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
 		String username = authentication.getName();
 		String path = this.path.concat(username);
-		FileMetadataDto fileMetaData = this.photoProfileService.putFile(path, photo.getOriginalFilename(), photo.getBytes(), locale);
-		return new ResponseEntity<FileMetadataDto>(fileMetaData, HttpStatus.OK);
+		ApiBaseResponse res = this.photoProfileService.putFile(path, photo.getOriginalFilename(), photo.getBytes(), authentication, locale);
+		return new ResponseEntity<ApiBaseResponse>(res, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/vw/get/photo-profile/v.1/{checksum}", method = RequestMethod.GET, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)	

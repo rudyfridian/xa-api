@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.github.xaphira.common.exceptions.SystemErrorException;
 import io.github.xaphira.common.utils.ErrorCode;
@@ -37,6 +39,7 @@ public class FileGenericImplService {
     @Value("${xa.file.path.tmp:D:\\Temps\\}")
     protected String filePath;
 
+	@Transactional(noRollbackFor = { ConstraintViolationException.class }, propagation = Propagation.REQUIRES_NEW)
 	public FileMetadataDto putFile(String filePath, String filename, byte[] fileContent) throws Exception {
 		if (filePath.isEmpty()) filePath = this.filePath;
 		FileMetadataDto fileMetadataDto = fileUtils.writeFile(filePath, filename, fileContent);
@@ -50,11 +53,7 @@ public class FileGenericImplService {
 		fileMetadata.setLocation(fileMetadataDto.getLocation());
 		fileMetadata.setShortname(fileMetadataDto.getShortname());
 		fileMetadata.setSize(fileMetadataDto.getSize());
-		try {
-			fileMetadataRepo.save(fileMetadata);
-		} catch (DataIntegrityViolationException e) {
-			LOGGER.warn(e.getMessage());
-		}
+		fileMetadataRepo.saveAndFlush(fileMetadata);
 		return fileMetadataDto;
 	}
 	

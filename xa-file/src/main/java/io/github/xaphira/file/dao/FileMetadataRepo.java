@@ -2,6 +2,9 @@ package io.github.xaphira.file.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import io.github.xaphira.file.entity.FileMetadataEntity;
 
@@ -9,6 +12,14 @@ public interface FileMetadataRepo extends JpaRepository<FileMetadataEntity, Stri
 
 	FileMetadataEntity findByChecksum(String checksum);
 
-	int deleteByChecksum(String checksum);
+	FileMetadataEntity findByLocation(String location);
+
+	@Modifying
+	@Query("DELETE FROM FileMetadataEntity f WHERE f.checksum = :checksum")
+	void deleteByChecksum(@Param("checksum") String checksum);
+
+	@Modifying
+	@Query("DELETE FROM FileMetadataEntity f WHERE f.location = :location")
+	void deleteByLocation(@Param("location") String location);
 	
 }

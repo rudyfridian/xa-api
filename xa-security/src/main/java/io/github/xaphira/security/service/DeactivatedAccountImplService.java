@@ -1,5 +1,7 @@
 package io.github.xaphira.security.service;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +30,10 @@ public class DeactivatedAccountImplService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	public ApiBaseResponse doDeactivate(String password, UserEntity p_user, String p_locale) throws Exception {
-		if (p_user.getUsername() != null) {
+	public ApiBaseResponse doDeactivate(Map<String, String> dto, UserEntity p_user, String p_locale) throws Exception {
+		if (p_user.getUsername() != null && dto != null) {
 			p_user = this.userRepo.findByUsername(p_user.getUsername());
-			password = AESEncrypt.decrypt(this.secretKey, password);
+			String password = AESEncrypt.decrypt(this.secretKey, dto.get("password"));
 			if (this.passwordEncoder.matches(password, p_user.getPassword())) {
 				p_user.setActive(false);
 				userRepo.save(p_user);

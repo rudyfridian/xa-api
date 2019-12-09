@@ -1,5 +1,7 @@
 package io.github.xaphira.security.api;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,9 +32,9 @@ public class DeactivatedAccountController extends BaseControllerException {
 	@RequestMapping(value = "/trx/auth/deactivated/v.1", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ApiBaseResponse> putSettings(Authentication authentication,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale,
-			@RequestBody(required = true) String password) throws Exception {
+			@RequestBody(required = true) Map<String, String> dto) throws Exception {
 		UserEntity user = (UserEntity) authentication.getPrincipal();
-		return new ResponseEntity<ApiBaseResponse>(deactivatedAccountService.doDeactivate(password, user, locale), HttpStatus.OK);
+		return new ResponseEntity<ApiBaseResponse>(deactivatedAccountService.doDeactivate(dto, user, locale), HttpStatus.OK);
 	}
 	
 }

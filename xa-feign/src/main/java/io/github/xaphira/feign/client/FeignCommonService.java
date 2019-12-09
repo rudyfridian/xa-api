@@ -1,4 +1,4 @@
-package io.github.xaphira.feign.service;
+package io.github.xaphira.feign.client;
 
 import org.springframework.http.ResponseEntity;
 

@@ -4,20 +4,20 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.transaction.Transactional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import io.github.xaphira.common.exceptions.FeignThrowException;
+import io.github.xaphira.common.http.ApiBaseResponse;
 import io.github.xaphira.feign.dto.file.FileMetadataDto;
-import io.github.xaphira.feign.service.ProfileFeignService;
+import io.github.xaphira.feign.service.ProfileService;
 import io.github.xaphira.file.dao.FileMetadataRepo;
 import io.github.xaphira.file.entity.FileMetadataEntity;
-import io.github.xaphira.file.utils.FileUtils;
 
 @Service("photoProfileService")
 public class PhotoProfileImplService {
@@ -32,30 +32,34 @@ public class PhotoProfileImplService {
 	private FileGenericImplService fileGenericService;
 
 	@Autowired
-	private ProfileFeignService profileFeignService;
+	private ProfileService profileService;
 
 	@Transactional
-	public FileMetadataDto putFile(String filePath, String filename, byte[] fileContent, String locale) throws Exception {
-		String checksum = FileUtils.fileChecksum("MD5", fileContent);
-		FileMetadataEntity fileExist = fileMetadataRepo.findByChecksum(checksum);
-		FileMetadataDto fileMetadataDto = null; 
-		if (fileExist != null) {
-			System.err.println("exists");
-			fileMetadataRepo.deleteByChecksum(checksum);
+	public ApiBaseResponse putFile(String filePath, String filename, byte[] fileContent, Authentication authentication, String locale) throws Exception {
+		FileMetadataEntity fileExist = fileMetadataRepo.findByLocation(filePath);
+		FileMetadataDto fileMetadataDto = null;
+		String checksum = null;
+		try {
+			fileMetadataDto = fileGenericService.putFile(filePath, filename, fileContent);
+			checksum = fileMetadataDto.getChecksum();
+		} catch (DataIntegrityViolationException e) {
+			checksum = fileExist.getChecksum();
+			LOGGER.warn(e.getMessage());
 		}
-		fileMetadataDto = fileGenericService.putFile(filePath, filename, fileContent);
 		Map<String, String> url = new HashMap<String, String>();
 		url.put("url", checksum);
-		try {
-			this.profileFeignService.putPhotoProfile(url, locale);
-		} catch (FeignThrowException e) {
-			throw e;
-		}
+		this.profileService.doUpdatePhoto(url, authentication, locale);
+		
 		if (fileExist != null) {
-		    File currentFile = new File(filePath, fileExist.getChecksum());
-		    currentFile.delete();
+			if (!fileExist.getChecksum().equals(checksum)) {
+				fileMetadataRepo.deleteByChecksum(fileExist.getChecksum());
+			    File currentFile = new File(filePath, fileExist.getChecksum());
+			    currentFile.delete();
+			}
 		}
-		return fileMetadataDto;
+		ApiBaseResponse response = new ApiBaseResponse();
+		response.getRespStatusMessage().put("checksum", checksum);
+		return response;
 	}
 	
 }

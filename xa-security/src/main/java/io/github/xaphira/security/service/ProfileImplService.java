@@ -1,26 +1,32 @@
 package io.github.xaphira.security.service;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.github.xaphira.common.exceptions.SystemErrorException;
 import io.github.xaphira.common.http.ApiBaseResponse;
 import io.github.xaphira.common.pattern.PatternGlobal;
 import io.github.xaphira.common.utils.ErrorCode;
 import io.github.xaphira.feign.dto.security.UserDto;
+import io.github.xaphira.feign.service.ProfileService;
 import io.github.xaphira.security.dao.UserRepo;
 import io.github.xaphira.security.entity.UserEntity;
 
 @Service("profileService")
-public class ProfileImplService {
+public class ProfileImplService implements ProfileService {
 
 	protected Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private UserRepo userRepo;
 
+	@Transactional
 	public ApiBaseResponse doUpdateProfile(UserDto p_dto, UserEntity p_user, String p_locale) throws Exception {
 		if (p_user.getUsername() != null) {
 			p_user = this.userRepo.findByUsername(p_user.getUsername());
@@ -55,12 +61,13 @@ public class ProfileImplService {
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
 	}
 
-	public ApiBaseResponse doUpdatePhoto(String url, UserEntity p_user, String p_locale) throws Exception {
-		if (p_user.getUsername() != null) {
-			p_user = this.userRepo.findByUsername(p_user.getUsername());
-			p_user.setImage(url);
-			userRepo.save(p_user);
-			return null;
+	@Override
+	public void doUpdatePhoto(Map<String, String> url, Authentication authentication, String locale) throws Exception {
+		UserEntity user = (UserEntity) authentication.getPrincipal();
+		if (user.getUsername() != null && url != null) {
+			user = userRepo.findByUsername(user.getUsername());
+			user.setImage(url.get("url"));
+			userRepo.save(user);
 		} else
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
 	}
