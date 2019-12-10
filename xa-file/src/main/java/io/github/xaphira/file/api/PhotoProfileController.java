@@ -49,7 +49,7 @@ public class PhotoProfileController extends BaseControllerException {
 		return new ResponseEntity<ApiBaseResponse>(res, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/vw/get/photo-profile/v.1/{checksum}", method = RequestMethod.GET, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)	
+	@RequestMapping(value = "/vw/get/photo-profile/v.1/{checksum}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)	
 	public ResponseEntity<Resource> downlaodPhotoProfile(Authentication authentication,
 			@PathVariable(required = true) String checksum,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {

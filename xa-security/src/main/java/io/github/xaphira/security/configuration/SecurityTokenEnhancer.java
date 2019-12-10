@@ -3,6 +3,8 @@ package io.github.xaphira.security.configuration;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +18,8 @@ import io.github.xaphira.security.entity.UserEntity;
 import io.github.xaphira.security.service.MenuImplService;
 
 public class SecurityTokenEnhancer implements TokenEnhancer {
+
+    protected Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 	
 	@Value("${xa.client-id.web}")
 	private String clientIdWeb;
@@ -36,9 +40,10 @@ public class SecurityTokenEnhancer implements TokenEnhancer {
 				try {
 					additionalInfo.put("menus", menuService.loadMenuByRole(user.getAuthorityDefault(), user.getLocale()));
 				} catch (Exception e) {
-					e.printStackTrace();
+					LOGGER.error(e.getMessage(), e);
 				}
 			}
+	        additionalInfo.put("image", user.getImage());
 	        additionalInfo.put("authority", user.getAuthorityDefault());
 	        additionalInfo.put("email", user.getEmail());
 	        additionalInfo.put("name", user.getName());

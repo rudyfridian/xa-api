@@ -89,7 +89,7 @@ public class UserEntity extends BaseAuditEntity implements UserDetails {
 	@Column(name = "mobile_number", nullable = true)
 	private String mobileNumber;
 
-	@Column(name = "image", nullable = false)
+	@Column(name = "image", nullable = true)
 	private String image;
 
 	@Column(name = "description", nullable = true)
