@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -56,14 +56,11 @@ public class OAuth2ServerConfiguration extends AuthorizationServerConfigurerAdap
     @Autowired
     private WebResponseExceptionTranslator<OAuth2Exception> exceptionTranslator;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {		
 		super.configure(security);
 		security.authenticationEntryPoint(authenticationEntryPoint).accessDeniedHandler(accessDeniedHandler);
-		security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()").passwordEncoder(passwordEncoder);
+		security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()").passwordEncoder(new BCryptPasswordEncoder(13));
 	}
 
 	@Override
