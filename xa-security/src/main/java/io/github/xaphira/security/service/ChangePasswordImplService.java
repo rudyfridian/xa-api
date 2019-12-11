@@ -42,7 +42,7 @@ public class ChangePasswordImplService {
 				if (!newPassword.equals(password)) {
 					if (newPassword.equals(confirmPassword)) {
 						if (newPassword.matches(PatternGlobal.PASSWORD_MEDIUM.getRegex())) {
-							p_user.setPassword(this.passwordEncoder.encode(newPassword));
+							p_user.setPassword(this.passwordEncoder.encode((String)newPassword));
 							userRepo.save(p_user);
 							return null;
 						} else {

@@ -59,7 +59,7 @@ public class UserEntity extends BaseAuditEntity implements UserDetails {
 	@Column(name = "account_non_expired", nullable = false)
 	private boolean accountNonExpired = true;
 
-	@Column(name = "account_non_locker", nullable = false)
+	@Column(name = "account_non_locked", nullable = false)
 	private boolean accountNonLocked = true;
 
 	@Column(name = "credentials_non_expired", nullable = false)

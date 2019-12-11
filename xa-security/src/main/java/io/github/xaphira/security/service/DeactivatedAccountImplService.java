@@ -38,6 +38,7 @@ public class DeactivatedAccountImplService {
 			String password = AESEncrypt.decrypt(this.secretKey, dto.get("password"));
 			if (this.passwordEncoder.matches(password, p_user.getPassword())) {
 				p_user.setActive(false);
+				p_user.setEnabled(false);
 				userRepo.save(p_user);
 				return null;
 			} else {

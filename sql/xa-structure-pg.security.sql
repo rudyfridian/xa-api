@@ -138,7 +138,7 @@ CREATE TABLE security.sec_user (
 	"password" text NOT NULL,
 	account_enabled boolean DEFAULT true NOT NULL,
 	account_non_expired boolean DEFAULT true NOT NULL,
-	account_non_locker boolean DEFAULT true NOT NULL,
+	account_non_locked boolean DEFAULT true NOT NULL,
 	credentials_non_expired boolean DEFAULT true NOT NULL,
 	fullname varchar(200) NOT NULL,
 	email varchar(150) NOT NULL,
