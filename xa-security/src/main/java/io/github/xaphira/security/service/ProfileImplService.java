@@ -60,15 +60,35 @@ public class ProfileImplService implements ProfileService {
 		} else
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
 	}
+	
+	public UserDto getProfile(UserEntity p_user, String p_locale) throws Exception {
+		if (p_user.getUsername() != null) {
+			UserDto dto = new UserDto();
+			p_user = this.userRepo.findByUsername(p_user.getUsername());
+			dto.setUsername(p_user.getUsername());
+			dto.setName(p_user.getName());
+			dto.setEmail(p_user.getEmail());
+			dto.setAddress(p_user.getAddress());
+			dto.setCity(p_user.getCity());
+			dto.setProvince(p_user.getProvince());
+			dto.setDistrictCode(p_user.getProvince());
+			dto.setImage(p_user.getImage());
+			dto.setMobileNumber(p_user.getMobileNumber());
+			dto.setPhoneNumber(p_user.getPhoneNumber());
+			dto.setDescription(p_user.getDescription());
+			return dto;
+		} else
+			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
+	}
 
 	@Transactional
 	@Override
 	public void doUpdatePhoto(Map<String, String> url, Authentication authentication, String locale) throws Exception {
 		UserEntity user = (UserEntity) authentication.getPrincipal();
 		if (user.getUsername() != null && url != null) {
-			user = userRepo.findByUsername(user.getUsername());
+			user = this.userRepo.findByUsername(user.getUsername());
 			user.setImage(url.get("url"));
-			userRepo.save(user);
+			this.userRepo.save(user);
 		} else
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
 	}

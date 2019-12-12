@@ -36,4 +36,11 @@ public class ProfileController extends BaseControllerException {
 		return new ResponseEntity<ApiBaseResponse>(profileService.doUpdateProfile(p_dto, user, locale), HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/vw/get/profile/v.1", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserDto> getProfile(Authentication authentication,
+			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
+		UserEntity user = (UserEntity) authentication.getPrincipal();
+		return new ResponseEntity<UserDto>(profileService.getProfile(user, locale), HttpStatus.OK);
+	}
+	
 }
