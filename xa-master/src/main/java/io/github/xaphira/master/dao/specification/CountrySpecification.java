@@ -16,7 +16,7 @@ import io.github.xaphira.master.entity.CountryEntity;
 
 public class CountrySpecification {
 	
-	private static final String IS_ACTIVE = "isActive";
+	private static final String IS_ACTIVE = "active";
 
 	public static Specification<CountryEntity> getSelect(Map<String, String> keyword) {
 		return new Specification<CountryEntity>() {
@@ -51,7 +51,7 @@ public class CountrySpecification {
 						}
 					}
 				}
-				predicate = builder.and(predicate, builder.equal(root.get(IS_ACTIVE), 1));
+				predicate = builder.and(predicate, builder.equal(root.get(IS_ACTIVE), true));
 				return predicate;
 			}
 		};
