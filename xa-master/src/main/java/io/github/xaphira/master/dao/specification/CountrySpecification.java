@@ -3,6 +3,8 @@
  */
 package io.github.xaphira.master.dao.specification;
 
+import java.util.Map;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -13,8 +15,10 @@ import org.springframework.data.jpa.domain.Specification;
 import io.github.xaphira.master.entity.CountryEntity;
 
 public class CountrySpecification {
+	
+	private static final String IS_ACTIVE = "isActive";
 
-	public static Specification<CountryEntity> getSelect(Integer offset, Integer limit, String keyword, String order, String sortBy) {
+	public static Specification<CountryEntity> getSelect(Map<String, String> keyword) {
 		return new Specification<CountryEntity>() {
 
 			/**
@@ -24,14 +28,31 @@ public class CountrySpecification {
 
 			@Override
 			public Predicate toPredicate(Root<CountryEntity> root, CriteriaQuery<?> criteria, CriteriaBuilder builder) {
-				Predicate _predicate = builder.disjunction();
-				if(keyword == null)
-					_predicate = builder.conjunction();
+				Predicate predicate = builder.disjunction();
+				if (keyword == null || keyword.isEmpty())
+					predicate = builder.conjunction();
 				else {
-					_predicate.getExpressions().add(builder.equal(root.get(sortBy), keyword));
+					for(Map.Entry<String, String> filter : keyword.entrySet()) {
+						String key = filter.getKey();
+						String value = filter.getValue();
+						switch (key) {
+							case "_label" :
+							case "countryName" :
+								predicate.getExpressions().add(builder.like(root.<String>get("countryName"), String.format("%%%s%%", value)));
+								break;
+							case "capital" :
+								predicate.getExpressions().add(builder.like(root.<String>get(key), String.format("%%%s%%", value)));
+								break;
+							case "countryCode" :
+							case "phonePrefix" :
+							case "flag" :
+								predicate.getExpressions().add(builder.equal(root.get(key), value));
+								break;
+						}
+					}
 				}
-				_predicate = builder.and(_predicate, builder.equal(root.get("active"), 1));
-				return _predicate;
+				predicate = builder.and(predicate, builder.equal(root.get(IS_ACTIVE), 1));
+				return predicate;
 			}
 		};
 	}
