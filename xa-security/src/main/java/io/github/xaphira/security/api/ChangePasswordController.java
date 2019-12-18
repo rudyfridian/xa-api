@@ -21,7 +21,7 @@ import io.github.xaphira.security.entity.UserEntity;
 import io.github.xaphira.security.service.ChangePasswordImplService;
 
 @RestController
-@RequestMapping("/api/security")
+@RequestMapping("/api/master")
 public class ChangePasswordController extends BaseControllerException {
 
 	@Autowired
