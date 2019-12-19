@@ -32,17 +32,21 @@ public class ProvinceSpecification {
 					for(Map.Entry<String, String> filter : keyword.entrySet()) {
 						String key = filter.getKey();
 						String value = filter.getValue();
-						switch (key) {
-							case "_label" :
-							case "provinceName" :
-								predicate.getExpressions().add(builder.like(root.<String>get("provinceName"), String.format("%%%s%%", value)));
-								break;
-							case "provinceCode" :
-								predicate.getExpressions().add(builder.equal(root.get(key), value));
-								break;
-							case "country" :
-								predicate = builder.and(predicate, builder.equal(root.join(key).<String>get("countryCode"), value));
-								break;
+						if (value != null) {
+							switch (key) {
+								case "_label" :
+								case "provinceName" :
+									predicate.getExpressions().add(builder.like(root.<String>get("provinceName"), String.format("%%%s%%", value)));
+									break;
+								case "provinceCode" :
+									predicate.getExpressions().add(builder.equal(root.get(key), value));
+									break;
+								case "country" :
+									predicate = builder.and(predicate, builder.equal(root.join(key).<String>get("countryCode"), value));
+									break;
+							}
+						} else {
+							predicate = builder.conjunction();
 						}
 					}
 				}

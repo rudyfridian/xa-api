@@ -28,7 +28,7 @@ public class DistrictImplService extends CommonService {
 		response.setTotalFiltered(country.getTotalElements());
 		response.setTotalRecord(districtRepo.count(DistrictSpecification.getSelect(filter.getKeyword())));
 		country.getContent().forEach(value -> {
-			response.getData().add(new SelectDto(value.getDistrictName(), value.getDistrictCode(), value.isActive()));
+			response.getData().add(new SelectDto(value.getDistrictName(), value.getDistrictCode(), !value.isActive()));
 		});
 		return response;
 	}

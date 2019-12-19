@@ -28,7 +28,7 @@ public class CityImplService extends CommonService {
 		response.setTotalFiltered(country.getTotalElements());
 		response.setTotalRecord(cityRepo.count(CitySpecification.getSelect(filter.getKeyword())));
 		country.getContent().forEach(value -> {
-			response.getData().add(new SelectDto(value.getCityName(), value.getCityCode(), value.isActive()));
+			response.getData().add(new SelectDto(value.getCityName(), value.getCityCode(), !value.isActive()));
 		});
 		return response;
 	}

@@ -35,17 +35,19 @@ public class DistrictSpecification {
 					for(Map.Entry<String, String> filter : keyword.entrySet()) {
 						String key = filter.getKey();
 						String value = filter.getValue();
-						switch (key) {
-							case "_label" :
-							case "districtName" :
-								predicate.getExpressions().add(builder.like(root.<String>get("districtName"), String.format("%%%s%%", value)));
-								break;
-							case "districtCode" :
-								predicate.getExpressions().add(builder.equal(root.get(key), value));
-								break;
-							case "city" :
-								predicate = builder.and(predicate, builder.equal(root.join(key).<String>get("cityCode"), value));
-								break;
+						if (value != null) {
+							switch (key) {
+								case "_label" :
+								case "districtName" :
+									predicate.getExpressions().add(builder.like(root.<String>get("districtName"), String.format("%%%s%%", value)));
+									break;
+								case "districtCode" :
+									predicate.getExpressions().add(builder.equal(root.get(key), value));
+									break;
+								case "city" :
+									predicate = builder.and(predicate, builder.equal(root.join(key).<String>get("cityCode"), value));
+									break;
+							}	
 						}
 					}
 				}

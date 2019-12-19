@@ -35,19 +35,21 @@ public class CountrySpecification {
 					for(Map.Entry<String, String> filter : keyword.entrySet()) {
 						String key = filter.getKey();
 						String value = filter.getValue();
-						switch (key) {
-							case "_label" :
-							case "countryName" :
-								predicate.getExpressions().add(builder.like(root.<String>get("countryName"), String.format("%%%s%%", value)));
-								break;
-							case "capital" :
-								predicate.getExpressions().add(builder.like(root.<String>get(key), String.format("%%%s%%", value)));
-								break;
-							case "countryCode" :
-							case "phonePrefix" :
-							case "flag" :
-								predicate.getExpressions().add(builder.equal(root.get(key), value));
-								break;
+						if (value != null) {
+							switch (key) {
+								case "_label" :
+								case "countryName" :
+									predicate.getExpressions().add(builder.like(root.<String>get("countryName"), String.format("%%%s%%", value)));
+									break;
+								case "capital" :
+									predicate.getExpressions().add(builder.like(root.<String>get(key), String.format("%%%s%%", value)));
+									break;
+								case "countryCode" :
+								case "phonePrefix" :
+								case "flag" :
+									predicate.getExpressions().add(builder.equal(root.get(key), value));
+									break;
+							}	
 						}
 					}
 				}

@@ -35,17 +35,19 @@ public class SubDistrictSpecification {
 					for(Map.Entry<String, String> filter : keyword.entrySet()) {
 						String key = filter.getKey();
 						String value = filter.getValue();
-						switch (key) {
-							case "_label" :
-							case "subDistrictName" :
-								predicate.getExpressions().add(builder.like(root.<String>get("subDistrictName"), String.format("%%%s%%", value)));
-								break;
-							case "subDistrictCode" :
-								predicate.getExpressions().add(builder.equal(root.get(key), value));
-								break;
-							case "district" :
-								predicate = builder.and(predicate, builder.equal(root.join(key).<String>get("districtCode"), value));
-								break;
+						if (value != null) {
+							switch (key) {
+								case "_label" :
+								case "subDistrictName" :
+									predicate.getExpressions().add(builder.like(root.<String>get("subDistrictName"), String.format("%%%s%%", value)));
+									break;
+								case "subDistrictCode" :
+									predicate.getExpressions().add(builder.equal(root.get(key), value));
+									break;
+								case "district" :
+									predicate = builder.and(predicate, builder.equal(root.join(key).<String>get("districtCode"), value));
+									break;
+							}	
 						}
 					}
 				}
