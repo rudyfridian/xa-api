@@ -25,7 +25,7 @@ public class CountryImplService extends CommonService {
 	public SelectResponseDto getSelectCountry(FilterDto filter) throws Exception {
 		Page<CountryEntity> country = countryRepo.findAll(CountrySpecification.getSelect(filter.getKeyword()), page(filter.getOrder(), filter.getOffset(), filter.getLimit()));
 		SelectResponseDto response = new SelectResponseDto();
-		response.setTotalFiltered(country.getTotalElements());
+		response.setTotalFiltered(new Long(country.getContent().size()));
 		response.setTotalRecord(countryRepo.count(CountrySpecification.getSelect(filter.getKeyword())));
 		country.getContent().forEach(value -> {
 			response.getData().add(new SelectDto(value.getCountryName(), value.getCountryCode(), !value.isActive()));

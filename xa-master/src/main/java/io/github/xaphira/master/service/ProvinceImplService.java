@@ -23,11 +23,11 @@ public class ProvinceImplService extends CommonService {
 	private ProvinceRepo provinceRepo;
 
 	public SelectResponseDto getSelectProvince(FilterDto filter) throws Exception {
-		Page<ProvinceEntity> country = provinceRepo.findAll(ProvinceSpecification.getSelect(filter.getKeyword()), page(filter.getOrder(), filter.getOffset(), filter.getLimit()));
+		Page<ProvinceEntity> province = provinceRepo.findAll(ProvinceSpecification.getSelect(filter.getKeyword()), page(filter.getOrder(), filter.getOffset(), filter.getLimit()));
 		SelectResponseDto response = new SelectResponseDto();
-		response.setTotalFiltered(country.getTotalElements());
+		response.setTotalFiltered(new Long(province.getContent().size()));
 		response.setTotalRecord(provinceRepo.count(ProvinceSpecification.getSelect(filter.getKeyword())));
-		country.getContent().forEach(value -> {
+		province.getContent().forEach(value -> {
 			response.getData().add(new SelectDto(value.getProvinceName(), value.getProvinceCode(), !value.isActive()));
 		});
 		return response;

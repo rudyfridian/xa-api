@@ -25,10 +25,8 @@ public class ProvinceSpecification {
 
 			@Override
 			public Predicate toPredicate(Root<ProvinceEntity> root, CriteriaQuery<?> criteria, CriteriaBuilder builder) {
-				Predicate predicate = builder.disjunction();
-				if (keyword == null || keyword.isEmpty())
-					predicate = builder.conjunction();
-				else {
+				Predicate predicate = builder.conjunction();
+				if (!keyword.isEmpty()) {
 					for(Map.Entry<String, String> filter : keyword.entrySet()) {
 						String key = filter.getKey();
 						String value = filter.getValue();
@@ -45,8 +43,6 @@ public class ProvinceSpecification {
 									predicate = builder.and(predicate, builder.equal(root.join(key).<String>get("countryCode"), value));
 									break;
 							}
-						} else {
-							predicate = builder.conjunction();
 						}
 					}
 				}

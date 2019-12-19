@@ -23,11 +23,11 @@ public class DistrictImplService extends CommonService {
 	private DistrictRepo districtRepo;
 
 	public SelectResponseDto getSelectDistrict(FilterDto filter) throws Exception {
-		Page<DistrictEntity> country = districtRepo.findAll(DistrictSpecification.getSelect(filter.getKeyword()), page(filter.getOrder(), filter.getOffset(), filter.getLimit()));
+		Page<DistrictEntity> district = districtRepo.findAll(DistrictSpecification.getSelect(filter.getKeyword()), page(filter.getOrder(), filter.getOffset(), filter.getLimit()));
 		SelectResponseDto response = new SelectResponseDto();
-		response.setTotalFiltered(country.getTotalElements());
+		response.setTotalFiltered(new Long(district.getContent().size()));
 		response.setTotalRecord(districtRepo.count(DistrictSpecification.getSelect(filter.getKeyword())));
-		country.getContent().forEach(value -> {
+		district.getContent().forEach(value -> {
 			response.getData().add(new SelectDto(value.getDistrictName(), value.getDistrictCode(), !value.isActive()));
 		});
 		return response;

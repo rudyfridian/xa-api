@@ -28,10 +28,8 @@ public class CountrySpecification {
 
 			@Override
 			public Predicate toPredicate(Root<CountryEntity> root, CriteriaQuery<?> criteria, CriteriaBuilder builder) {
-				Predicate predicate = builder.disjunction();
-				if (keyword == null || keyword.isEmpty())
-					predicate = builder.conjunction();
-				else {
+				Predicate predicate = builder.conjunction();
+				if (!keyword.isEmpty()) {
 					for(Map.Entry<String, String> filter : keyword.entrySet()) {
 						String key = filter.getKey();
 						String value = filter.getValue();

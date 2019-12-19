@@ -23,11 +23,11 @@ public class CityImplService extends CommonService {
 	private CityRepo cityRepo;
 
 	public SelectResponseDto getSelectCity(FilterDto filter) throws Exception {
-		Page<CityEntity> country = cityRepo.findAll(CitySpecification.getSelect(filter.getKeyword()), page(filter.getOrder(), filter.getOffset(), filter.getLimit()));
+		Page<CityEntity> city = cityRepo.findAll(CitySpecification.getSelect(filter.getKeyword()), page(filter.getOrder(), filter.getOffset(), filter.getLimit()));
 		SelectResponseDto response = new SelectResponseDto();
-		response.setTotalFiltered(country.getTotalElements());
+		response.setTotalFiltered(new Long(city.getContent().size()));
 		response.setTotalRecord(cityRepo.count(CitySpecification.getSelect(filter.getKeyword())));
-		country.getContent().forEach(value -> {
+		city.getContent().forEach(value -> {
 			response.getData().add(new SelectDto(value.getCityName(), value.getCityCode(), !value.isActive()));
 		});
 		return response;
