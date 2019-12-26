@@ -12,11 +12,10 @@ public final class DateUtil {
 	private DateUtil() {}
 	
 	public static final String DEFAULT_FORMAT_DATE = "dd/MM/yyyy";
-	public static final String DATE_NOW = new SimpleDateFormat(DEFAULT_FORMAT_DATE).format(new Date());
-	public static final Long DATE_TIME = new Date().getTime();
+	public static final SimpleDateFormat DATE = new SimpleDateFormat(DEFAULT_FORMAT_DATE);
 	
 	public static final String DEFAULT_FORMAT_DATE_TIME = "dd/MM/yyyy HH:mm:ss";
-	public static final String DATE_TIME_NOW = new SimpleDateFormat(DEFAULT_FORMAT_DATE_TIME).format(new Date());
+	public static final SimpleDateFormat DATE_TIME = new SimpleDateFormat(DEFAULT_FORMAT_DATE_TIME);
 	
 	public static String formatDate(Date date, SimpleDateFormat sdf) {
 		if (date == null) {

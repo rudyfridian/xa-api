@@ -37,10 +37,12 @@ public class CountrySpecification {
 							switch (key) {
 								case "_label" :
 								case "countryName" :
-									predicate.getExpressions().add(builder.like(root.<String>get("countryName"), String.format("%%%s%%", value)));
+									// builder.upper for PostgreSQL
+									predicate.getExpressions().add(builder.like(builder.upper(root.<String>get("countryName")), String.format("%%%s%%", value.toUpperCase())));
 									break;
 								case "capital" :
-									predicate.getExpressions().add(builder.like(root.<String>get(key), String.format("%%%s%%", value)));
+									// builder.upper for PostgreSQL
+									predicate.getExpressions().add(builder.like(builder.upper(root.<String>get(key)), String.format("%%%s%%", value.toUpperCase())));
 									break;
 								case "countryCode" :
 								case "phonePrefix" :

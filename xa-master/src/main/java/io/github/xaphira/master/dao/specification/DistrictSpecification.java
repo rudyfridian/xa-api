@@ -37,7 +37,8 @@ public class DistrictSpecification {
 							switch (key) {
 								case "_label" :
 								case "districtName" :
-									predicate.getExpressions().add(builder.like(root.<String>get("districtName"), String.format("%%%s%%", value)));
+									// builder.upper for PostgreSQL
+									predicate.getExpressions().add(builder.like(builder.upper(root.<String>get("districtName")), String.format("%%%s%%", value.toUpperCase())));
 									break;
 								case "districtCode" :
 									predicate.getExpressions().add(builder.equal(root.get(key), value));

@@ -1,7 +1,7 @@
 package io.github.xaphira.common.http;
 
 import java.io.IOException;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Locale;
 
 import javax.servlet.Filter;
@@ -79,7 +79,7 @@ public class SignatureInterceptor implements Filter {
     				throw new SystemErrorException(ErrorCode.ERR_XXAKEY);
             	try {
             		datenow = DateUtil.formatDate(new Date(new Long(request.getHeader("X-XA-Timestamp")) * 1000), DateUtil.DEFAULT_FORMAT_DATE);
-            		if(!datenow.equals(DateUtil.DATE_NOW))
+            		if(!datenow.equals(DateUtil.DATE.format(new Date())))
         				throw new SystemErrorException(ErrorCode.ERR_XXATIMESTAMP);
     			} catch (Exception e) {
     				throw new SystemErrorException(ErrorCode.ERR_XXATIMESTAMP);

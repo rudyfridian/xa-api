@@ -20,7 +20,7 @@ public class FeignSignatureInterceptor {
 	private String publicKey;
 	
 	public String getTimestamp() {
-		return new Integer(new Double(Math.floor(DateUtil.DATE_TIME/1000)).intValue()).toString();
+		return new Integer(new Double(Math.floor(new Date().getTime()/1000)).intValue()).toString();
 	}
 	
 	public String getPublicKey() {
@@ -28,7 +28,7 @@ public class FeignSignatureInterceptor {
 	}
 	
 	public String getSignature(String path, String jwt) {
-		String datenow = DateUtil.formatDate(new Date(DateUtil.DATE_TIME), DateUtil.DEFAULT_FORMAT_DATE);
+		String datenow = DateUtil.formatDate(new Date(), DateUtil.DEFAULT_FORMAT_DATE);
 		String message = this.getPublicKey() + ":" + 
 				this.getTimestamp() + ":" +
 				datenow  + ":" +

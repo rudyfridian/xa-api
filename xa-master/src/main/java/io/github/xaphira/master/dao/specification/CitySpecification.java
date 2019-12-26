@@ -37,13 +37,14 @@ public class CitySpecification {
 							switch (key) {
 								case "_label" :
 								case "cityName" :
-									predicate.getExpressions().add(builder.like(root.<String>get("cityName"), String.format("%%%s%%", value)));
+									// builder.upper for PostgreSQL
+									predicate.getExpressions().add(builder.like(builder.upper(root.<String>get("cityName")), String.format("%%%s%%", value.toUpperCase())));
 									break;
 								case "cityCode" :
 									predicate.getExpressions().add(builder.equal(root.get(key), value));
 									break;
 								case "province" :
-									predicate = builder.and(predicate, builder.equal(root.join(key).<String>get("provinceCode"), value));
+									predicate = builder.and(predicate, builder.equal(root.join(key).<String>get("provinceCode"), value.toUpperCase()));
 									break;
 							}	
 						}

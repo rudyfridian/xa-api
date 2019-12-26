@@ -34,7 +34,8 @@ public class ProvinceSpecification {
 							switch (key) {
 								case "_label" :
 								case "provinceName" :
-									predicate.getExpressions().add(builder.like(root.<String>get("provinceName"), String.format("%%%s%%", value)));
+									// builder.upper for PostgreSQL
+									predicate.getExpressions().add(builder.like(builder.upper(root.<String>get("provinceName")), String.format("%%%s%%", value.toUpperCase())));
 									break;
 								case "provinceCode" :
 									predicate.getExpressions().add(builder.equal(root.get(key), value));

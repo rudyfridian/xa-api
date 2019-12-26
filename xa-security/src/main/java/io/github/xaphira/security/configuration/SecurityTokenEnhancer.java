@@ -1,5 +1,6 @@
 package io.github.xaphira.security.configuration;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -49,7 +50,7 @@ public class SecurityTokenEnhancer implements TokenEnhancer {
 	        additionalInfo.put("name", user.getName());
 	        additionalInfo.put("locale", user.getLocale());
 	        additionalInfo.put("theme", user.getTheme());
-	        additionalInfo.put("server_date", DateUtil.DATE_NOW);
+	        additionalInfo.put("server_date", DateUtil.DATE.format(new Date()));
 	        additionalInfo.put("xrkey", publicKey);
 	        ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
 		}
