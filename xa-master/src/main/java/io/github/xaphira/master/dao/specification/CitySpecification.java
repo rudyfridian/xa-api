@@ -56,4 +56,40 @@ public class CitySpecification {
 		};
 	}
 
+	public static Specification<CityEntity> getDatatable(Map<String, String> keyword) {
+		return new Specification<CityEntity>() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -637621292944403277L;
+
+			@Override
+			public Predicate toPredicate(Root<CityEntity> root, CriteriaQuery<?> criteria, CriteriaBuilder builder) {
+				Predicate predicate = builder.conjunction();
+				if (!keyword.isEmpty()) {
+					predicate = builder.disjunction();
+					for(Map.Entry<String, String> filter : keyword.entrySet()) {
+						String key = filter.getKey();
+						String value = filter.getValue();
+						if (value != null) {
+							switch (key) {									
+								case "cityName" :
+								case "cityCode" :
+									// builder.upper for PostgreSQL
+									predicate.getExpressions().add(builder.like(builder.upper(root.<String>get(key)), String.format("%%%s%%", value.toUpperCase())));
+									break;
+								case "province" :
+									// builder.upper for PostgreSQL
+									predicate.getExpressions().add(builder.like(builder.upper(root.join(key).<String>get("provinceName")), String.format("%%%s%%", value.toUpperCase())));
+									break;
+							}	
+						}
+					}
+				}
+				return predicate;
+			}
+		};
+	}
+
 }

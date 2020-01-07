@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.github.xaphira.common.exceptions.BaseControllerException;
 import io.github.xaphira.feign.dto.common.FilterDto;
+import io.github.xaphira.feign.dto.master.CityDatatableResponseDto;
 import io.github.xaphira.feign.dto.select.SelectResponseDto;
 import io.github.xaphira.master.service.CityImplService;
 
@@ -26,6 +27,12 @@ public class CityController extends BaseControllerException {
 	public ResponseEntity<SelectResponseDto> getSelectCity(Authentication authentication,
 			@RequestBody(required = true) FilterDto filter) throws Exception {
 		return new ResponseEntity<SelectResponseDto>(cityService.getSelectCity(filter), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/vw/post/datatable/city/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<CityDatatableResponseDto> getDatatableCity(Authentication authentication,
+			@RequestBody(required = true) FilterDto filter) throws Exception {
+		return new ResponseEntity<CityDatatableResponseDto>(cityService.getDatatableCity(filter), HttpStatus.OK);
 	}
 	
 }

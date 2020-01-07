@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,7 +16,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.GenericGenerator;
 
 import io.github.xaphira.common.entity.BaseAuditEntity;
 import io.github.xaphira.common.utils.SchemaDatabase;
@@ -40,10 +40,9 @@ public class CityEntity extends BaseAuditEntity {
 	private static final long serialVersionUID = -8125190677227153892L;
 
 	@Id
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@GeneratedValue(generator = "uuid")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", nullable = false, unique = true)
-	private String id;
+	private Long id;
 
 	@Column(name = "code", unique = true)
 	private String cityCode;
@@ -55,7 +54,7 @@ public class CityEntity extends BaseAuditEntity {
 	@Fetch(FetchMode.SELECT)
 	private Set<DistrictEntity> districts = new HashSet<DistrictEntity>();
 
-	@ManyToOne(targetEntity = ProvinceEntity.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = ProvinceEntity.class, fetch = FetchType.EAGER)
 	@JoinColumn(name = "province_id", nullable = false, insertable = false, updatable = false)
 	private ProvinceEntity province;
 

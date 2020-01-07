@@ -1,4 +1,4 @@
-package io.github.xaphira.feign.dto.select;
+package io.github.xaphira.feign.dto.master;
 
 import io.github.xaphira.feign.dto.common.CommonResponseDto;
 import lombok.Data;
@@ -8,7 +8,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @ToString
-public class SelectResponseDto extends CommonResponseDto<SelectDto> {
+public class CityDatatableResponseDto extends CommonResponseDto<CityDto> {
 
 	/**
 	 * 
