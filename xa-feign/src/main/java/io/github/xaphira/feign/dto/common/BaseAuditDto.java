@@ -21,15 +21,14 @@ public class BaseAuditDto implements Serializable {
 	 */
 	private static final long serialVersionUID = -1183080114772374130L;
 	protected int version;
-	protected boolean active;
-	protected String activeName;
+	protected String active;
 	protected Date createdDate;
 	protected String createdBy;
 	protected Date modifiedDate;
 	protected String modifiedBy;
 
-	public String getActiveName() {
-		if(this.active) return "Active";
+	public String isActive(boolean active) {
+		if(active) return "Active";
 		return "Deactivated";
 	}
 
