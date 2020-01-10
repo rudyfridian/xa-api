@@ -28,8 +28,10 @@ public class BaseAuditDto implements Serializable {
 	protected String modifiedBy;
 
 	public void setActive(boolean active) {
-		if(active) this.active = "Active";
-		this.active = "Deactivated";
+		if(active)
+			this.active = "Active";
+		else
+			this.active = "Deactivated";
 	}
 
 }
