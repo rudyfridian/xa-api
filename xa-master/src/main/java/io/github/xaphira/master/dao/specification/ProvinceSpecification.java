@@ -15,7 +15,7 @@ public class ProvinceSpecification {
 	
 	private static final String IS_ACTIVE = "active";
 
-	public static Specification<ProvinceEntity> getSelect(Map<String, String> keyword) {
+	public static Specification<ProvinceEntity> getSelect(Map<String, Object> keyword) {
 		return new Specification<ProvinceEntity>() {
 
 			/**
@@ -27,15 +27,15 @@ public class ProvinceSpecification {
 			public Predicate toPredicate(Root<ProvinceEntity> root, CriteriaQuery<?> criteria, CriteriaBuilder builder) {
 				Predicate predicate = builder.conjunction();
 				if (!keyword.isEmpty()) {
-					for(Map.Entry<String, String> filter : keyword.entrySet()) {
+					for(Map.Entry<String, Object> filter : keyword.entrySet()) {
 						String key = filter.getKey();
-						String value = filter.getValue();
+						Object value = filter.getValue();
 						if (value != null) {
 							switch (key) {
 								case "_label" :
 								case "provinceName" :
 									// builder.upper for PostgreSQL
-									predicate.getExpressions().add(builder.like(builder.upper(root.<String>get("provinceName")), String.format("%%%s%%", value.toUpperCase())));
+									predicate.getExpressions().add(builder.like(builder.upper(root.<String>get("provinceName")), String.format("%%%s%%", value.toString().toUpperCase())));
 									break;
 								case "provinceCode" :
 									predicate.getExpressions().add(builder.equal(root.get(key), value));

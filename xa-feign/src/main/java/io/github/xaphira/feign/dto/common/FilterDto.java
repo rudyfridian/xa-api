@@ -25,7 +25,7 @@ public class FilterDto implements Serializable {
 	private static final long serialVersionUID = -1183080114772374130L;
 	private int offset;
 	private int limit;
-	private Map<String, String> keyword = new HashMap<String, String>();
+	private Map<String, Object> keyword = new HashMap<String, Object>();
 	private Map<String, List<String>> order = new TreeMap<String, List<String>>();
 
 }

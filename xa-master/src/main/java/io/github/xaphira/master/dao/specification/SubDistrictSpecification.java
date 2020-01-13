@@ -18,7 +18,7 @@ public class SubDistrictSpecification {
 	
 	private static final String IS_ACTIVE = "active";
 
-	public static Specification<SubDistrictEntity> getSelect(Map<String, String> keyword) {
+	public static Specification<SubDistrictEntity> getSelect(Map<String, Object> keyword) {
 		return new Specification<SubDistrictEntity>() {
 
 			/**
@@ -30,15 +30,15 @@ public class SubDistrictSpecification {
 			public Predicate toPredicate(Root<SubDistrictEntity> root, CriteriaQuery<?> criteria, CriteriaBuilder builder) {
 				Predicate predicate = builder.conjunction();
 				if (!keyword.isEmpty()) {
-					for(Map.Entry<String, String> filter : keyword.entrySet()) {
+					for(Map.Entry<String, Object> filter : keyword.entrySet()) {
 						String key = filter.getKey();
-						String value = filter.getValue();
+						Object value = filter.getValue();
 						if (value != null) {
 							switch (key) {
 								case "_label" :
 								case "subDistrictName" :
 									// builder.upper for PostgreSQL
-									predicate.getExpressions().add(builder.like(builder.upper(root.<String>get("subDistrictName")), String.format("%%%s%%", value.toUpperCase())));
+									predicate.getExpressions().add(builder.like(builder.upper(root.<String>get("subDistrictName")), String.format("%%%s%%", value.toString().toUpperCase())));
 									break;
 								case "subDistrictCode" :
 									predicate.getExpressions().add(builder.equal(root.get(key), value));
