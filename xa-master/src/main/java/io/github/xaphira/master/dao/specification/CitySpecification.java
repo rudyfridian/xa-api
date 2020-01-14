@@ -85,7 +85,7 @@ public class CitySpecification {
 									predicate = builder.disjunction();
 									predicate.getExpressions().add(builder.like(builder.upper(root.<String>get("cityCode")), String.format("%%%s%%", value.toString().toUpperCase())));
 									predicate.getExpressions().add(builder.like(builder.upper(root.<String>get("cityName")), String.format("%%%s%%", value.toString().toUpperCase())));
-									predicate.getExpressions().add(builder.like(builder.upper(root.join(key).<String>get("provinceName")), String.format("%%%s%%", value.toString().toUpperCase())));
+									predicate.getExpressions().add(builder.like(builder.upper(root.join("province").<String>get("provinceName")), String.format("%%%s%%", value.toString().toUpperCase())));
 									break;
 								default :
 									break;
