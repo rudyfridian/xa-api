@@ -67,9 +67,9 @@ public class ProfileImplService implements ProfileService {
 		if (p_user.getUsername() != null) {
 			ProfileDto dto = new ProfileDto();
 			ProfileEntity profile = this.profileRepo.findByUser_Username(p_user.getUsername());
-			dto.setUsername(profile.getUser().getUsername());
+			dto.setUsername(p_user.getUsername());
 			dto.setName(profile.getName());
-			dto.setEmail(profile.getUser().getEmail());
+			dto.setEmail(p_user.getEmail());
 			dto.setAddress(profile.getAddress());
 			dto.setCity(profile.getCity());
 			dto.setProvince(profile.getProvince());

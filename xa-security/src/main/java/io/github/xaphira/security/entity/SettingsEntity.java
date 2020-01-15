@@ -45,7 +45,7 @@ public class SettingsEntity extends BaseAuditEntity {
 	@Column(name = "theme", nullable = false)
 	private String theme = "locale";
 
-	@OneToOne(targetEntity = UserEntity.class, fetch = FetchType.EAGER)
+	@OneToOne(targetEntity = UserEntity.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_uuid", nullable = false, insertable = false, updatable = false)
 	private UserEntity user;
 

@@ -16,8 +16,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -97,12 +95,10 @@ public class UserEntity extends BaseAuditEntity implements UserDetails {
 		return authorities;
 	}
 	
-	@OneToOne(mappedBy = "user", targetEntity = ProfileEntity.class, fetch = FetchType.EAGER)
-	@Fetch(FetchMode.SELECT)
+	@OneToOne(mappedBy = "user", targetEntity = ProfileEntity.class, fetch = FetchType.LAZY)
 	private ProfileEntity profile;
 	
-	@OneToOne(mappedBy = "user", targetEntity = SettingsEntity.class, fetch = FetchType.EAGER)
-	@Fetch(FetchMode.SELECT)
+	@OneToOne(mappedBy = "user", targetEntity = SettingsEntity.class, fetch = FetchType.LAZY)
 	private SettingsEntity settings;
 
 }
