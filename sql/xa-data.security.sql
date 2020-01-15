@@ -107,3 +107,13 @@ INSERT INTO security.sec_settings (settings_uuid, user_uuid) VALUES
 ('181545af-9410-47ca-8de2-4fd29d9da5d9', '181545af-9410-47ca-8de2-4fd29d9da5d9'),
 ('38527ac6-edb6-4a4f-8e60-eede49c4c2a6', '38527ac6-edb6-4a4f-8e60-eede49c4c2a6'),
 ('1ac29215-75e8-4e19-b4f1-e076da7ca1ab', '1ac29215-75e8-4e19-b4f1-e076da7ca1ab');
+
+--
+-- Dumping data for table sec_profile
+--
+	
+INSERT INTO security.sec_profile (profile_uuid, user_uuid, fullname) VALUES 
+('d4fd659f-7bd6-4b1c-9127-e2dcf04651b0', 'adfdd958-b9fe-4ebe-bf1e-1a19c0637071', 'Patient 01'),
+('d46b4b13-4159-4f5c-923d-5d8dfe3f48de', '38527ac6-edb6-4a4f-8e60-eede49c4c2a6', 'Radiographer 01'),
+('1af2403b-a4f8-4492-94c1-5d6ab8b4a094', '1ac29215-75e8-4e19-b4f1-e076da7ca1ab', 'Administrator'),
+('06be80df-5c41-42a7-9050-b328312d2f3a', '181545af-9410-47ca-8de2-4fd29d9da5d9', 'Doctor 01');
