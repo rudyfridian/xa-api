@@ -49,13 +49,13 @@ public class ProfileImplService implements ProfileService {
 				if (p_dto.getPhoneNumber().matches(PatternGlobal.PHONE_NUMBER.getRegex())) {
 					profile.setPhoneNumber(p_dto.getPhoneNumber());	
 				} else
-					throw new SystemErrorException(ErrorCode.ERR_SCR0007);
+					throw new SystemErrorException(ErrorCode.ERR_SCR0007A);
 			}
 			if (p_dto.getMobileNumber() != null) {
 				if (p_dto.getMobileNumber().matches(PatternGlobal.PHONE_NUMBER.getRegex())) {
 					profile.setMobileNumber(p_dto.getMobileNumber());	
 				} else
-					throw new SystemErrorException(ErrorCode.ERR_SCR0007);
+					throw new SystemErrorException(ErrorCode.ERR_SCR0007B);
 			}
 			this.profileRepo.save(profile);
 			return null;
