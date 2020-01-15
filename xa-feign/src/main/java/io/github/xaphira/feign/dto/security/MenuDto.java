@@ -1,9 +1,9 @@
 package io.github.xaphira.feign.dto.security;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.xaphira.feign.dto.common.BaseAuditDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,9 +13,9 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude={"children"})
+@EqualsAndHashCode(callSuper = false, exclude={"children"})
 @ToString(exclude={"children"})
-public class MenuDto implements Serializable {
+public class MenuDto extends BaseAuditDto {
 
     /**
 	 * 

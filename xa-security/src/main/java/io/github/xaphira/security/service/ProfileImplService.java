@@ -13,9 +13,10 @@ import io.github.xaphira.common.exceptions.SystemErrorException;
 import io.github.xaphira.common.http.ApiBaseResponse;
 import io.github.xaphira.common.pattern.PatternGlobal;
 import io.github.xaphira.common.utils.ErrorCode;
-import io.github.xaphira.feign.dto.security.UserDto;
+import io.github.xaphira.feign.dto.security.ProfileDto;
 import io.github.xaphira.feign.service.ProfileService;
-import io.github.xaphira.security.dao.UserRepo;
+import io.github.xaphira.security.dao.ProfileRepo;
+import io.github.xaphira.security.entity.ProfileEntity;
 import io.github.xaphira.security.entity.UserEntity;
 
 @Service("profileService")
@@ -24,19 +25,20 @@ public class ProfileImplService implements ProfileService {
 	protected Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private UserRepo userRepo;
+	private ProfileRepo profileRepo;
 
 	@Transactional
-	public ApiBaseResponse doUpdateProfile(UserDto p_dto, UserEntity p_user, String p_locale) throws Exception {
+	public ApiBaseResponse doUpdateProfile(ProfileDto p_dto, UserEntity p_user, String p_locale) throws Exception {
 		if (p_user.getUsername() != null) {
-			p_user = this.userRepo.findByUsername(p_user.getUsername());
-			p_user.setAddress(p_dto.getAddress());
-			p_user.setCity(p_dto.getCity());
-			p_user.setProvince(p_dto.getProvince());
-			p_user.setDistrictCode(p_dto.getDistrictCode());
-			p_user.setDescription(p_dto.getDescription());
+			ProfileEntity profile = this.profileRepo.findByUser_Username(p_user.getUsername());
+			profile.setAddress(p_dto.getAddress());
+			profile.setCity(p_dto.getCity());
+			profile.setProvince(p_dto.getProvince());
+			profile.setDistrict(p_dto.getDistrict());
+			profile.setSubDistrict(p_dto.getSubDistrict());
+			profile.setDescription(p_dto.getDescription());
 			if (p_dto.getName() != null)
-				p_user.setName(p_dto.getName());
+				profile.setName(p_dto.getName());
 			if (p_dto.getEmail() != null) {
 				if (p_dto.getEmail().matches(PatternGlobal.EMAIL.getRegex())) {
 					p_user.setEmail(p_dto.getEmail());	
@@ -45,37 +47,38 @@ public class ProfileImplService implements ProfileService {
 			}
 			if (p_dto.getPhoneNumber() != null) {
 				if (p_dto.getPhoneNumber().matches(PatternGlobal.PHONE_NUMBER.getRegex())) {
-					p_user.setPhoneNumber(p_dto.getPhoneNumber());	
+					profile.setPhoneNumber(p_dto.getPhoneNumber());	
 				} else
 					throw new SystemErrorException(ErrorCode.ERR_SCR0007);
 			}
 			if (p_dto.getMobileNumber() != null) {
 				if (p_dto.getMobileNumber().matches(PatternGlobal.PHONE_NUMBER.getRegex())) {
-					p_user.setMobileNumber(p_dto.getMobileNumber());	
+					profile.setMobileNumber(p_dto.getMobileNumber());	
 				} else
 					throw new SystemErrorException(ErrorCode.ERR_SCR0007);
 			}
-			userRepo.save(p_user);
+			this.profileRepo.save(profile);
 			return null;
 		} else
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
 	}
 	
-	public UserDto getProfile(UserEntity p_user, String p_locale) throws Exception {
+	public ProfileDto getProfile(UserEntity p_user, String p_locale) throws Exception {
 		if (p_user.getUsername() != null) {
-			UserDto dto = new UserDto();
-			p_user = this.userRepo.findByUsername(p_user.getUsername());
-			dto.setUsername(p_user.getUsername());
-			dto.setName(p_user.getName());
-			dto.setEmail(p_user.getEmail());
-			dto.setAddress(p_user.getAddress());
-			dto.setCity(p_user.getCity());
-			dto.setProvince(p_user.getProvince());
-			dto.setDistrictCode(p_user.getProvince());
-			dto.setImage(p_user.getImage());
-			dto.setMobileNumber(p_user.getMobileNumber());
-			dto.setPhoneNumber(p_user.getPhoneNumber());
-			dto.setDescription(p_user.getDescription());
+			ProfileDto dto = new ProfileDto();
+			ProfileEntity profile = this.profileRepo.findByUser_Username(p_user.getUsername());
+			dto.setUsername(profile.getUser().getUsername());
+			dto.setName(profile.getName());
+			dto.setEmail(profile.getUser().getEmail());
+			dto.setAddress(profile.getAddress());
+			dto.setCity(profile.getCity());
+			dto.setProvince(profile.getProvince());
+			dto.setDistrict(profile.getDistrict());
+			dto.setSubDistrict(profile.getSubDistrict());
+			dto.setImage(profile.getImage());
+			dto.setMobileNumber(profile.getMobileNumber());
+			dto.setPhoneNumber(profile.getPhoneNumber());
+			dto.setDescription(profile.getDescription());
 			return dto;
 		} else
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
@@ -86,9 +89,9 @@ public class ProfileImplService implements ProfileService {
 	public void doUpdatePhoto(Map<String, String> url, Authentication authentication, String locale) throws Exception {
 		UserEntity user = (UserEntity) authentication.getPrincipal();
 		if (user.getUsername() != null && url != null) {
-			user = this.userRepo.findByUsername(user.getUsername());
-			user.setImage(url.get("url"));
-			this.userRepo.save(user);
+			ProfileEntity profile = this.profileRepo.findByUser_Username(user.getUsername());
+			profile.setImage(url.get("url"));
+			this.profileRepo.save(profile);
 		} else
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
 	}

@@ -1,15 +1,18 @@
 package io.github.xaphira.feign.dto.security;
 
-import java.io.Serializable;
-
+import io.github.xaphira.feign.dto.common.BaseAuditDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SettingsDto implements Serializable {
+@EqualsAndHashCode(callSuper = false)
+@ToString
+public class SettingsDto extends BaseAuditDto {
 
     /**
 	 * 

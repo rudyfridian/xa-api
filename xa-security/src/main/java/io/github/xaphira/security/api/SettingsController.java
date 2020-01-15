@@ -21,7 +21,7 @@ import io.github.xaphira.security.entity.UserEntity;
 import io.github.xaphira.security.service.SettingsImplService;
 
 @RestController
-@RequestMapping("/api/profile")
+@RequestMapping("/api/security")
 public class SettingsController extends BaseControllerException {
 
 	@Autowired

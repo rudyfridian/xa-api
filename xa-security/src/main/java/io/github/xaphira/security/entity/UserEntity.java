@@ -12,9 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,8 +33,8 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper=false, exclude={"roles"})
-@ToString(exclude={"roles"})
+@EqualsAndHashCode(callSuper=false, exclude={"roles", "profile", "settings"})
+@ToString(exclude={"roles", "profile", "settings"})
 @Entity
 @Table(name = "sec_user", schema = SchemaDatabase.SECURITY)
 public class UserEntity extends BaseAuditEntity implements UserDetails {
@@ -65,47 +68,14 @@ public class UserEntity extends BaseAuditEntity implements UserDetails {
 	@Column(name = "credentials_non_expired", nullable = false)
 	private boolean credentialsNonExpired = true;
 
-	@Column(name = "fullname", nullable = false)
-	private String name;
-
 	@Column(name = "email", nullable = true, unique = true)
 	private String email;
-	
-	@Column(name = "address", nullable = false)
-	private String address;
-
-	@Column(name = "city", nullable = true)
-	private String city;
-
-	@Column(name = "province", nullable = true)
-	private String province;
-
-	@Column(name = "district_code", nullable = true)
-	private String districtCode;
-
-	@Column(name = "phone_number", nullable = true)
-	private String phoneNumber;
-
-	@Column(name = "mobile_number", nullable = true)
-	private String mobileNumber;
-
-	@Column(name = "image", nullable = true)
-	private String image;
-
-	@Column(name = "description", nullable = true)
-	private String description;
 
 	@Column(name = "verification_code", nullable = true)
 	private String verificationCode;
 
 	@Column(name = "raw", nullable = true)
 	private String raw;
-
-	@Column(name = "locale", nullable = false)
-	private String locale = "en-US";
-
-	@Column(name = "theme", nullable = false)
-	private String theme = "locale";
 
 	@Column(name = "authority_default")
 	private String authorityDefault;
@@ -126,5 +96,13 @@ public class UserEntity extends BaseAuditEntity implements UserDetails {
 		authorities.addAll(roles);
 		return authorities;
 	}
+	
+	@OneToOne(mappedBy = "user", targetEntity = ProfileEntity.class, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
+	private ProfileEntity profile;
+	
+	@OneToOne(mappedBy = "user", targetEntity = SettingsEntity.class, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
+	private SettingsEntity settings;
 
 }

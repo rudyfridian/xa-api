@@ -10,7 +10,8 @@ import io.github.xaphira.common.exceptions.SystemErrorException;
 import io.github.xaphira.common.http.ApiBaseResponse;
 import io.github.xaphira.common.utils.ErrorCode;
 import io.github.xaphira.feign.dto.security.SettingsDto;
-import io.github.xaphira.security.dao.UserRepo;
+import io.github.xaphira.security.dao.SettingsRepo;
+import io.github.xaphira.security.entity.SettingsEntity;
 import io.github.xaphira.security.entity.UserEntity;
 
 @Service("settingsService")
@@ -19,15 +20,15 @@ public class SettingsImplService {
 	protected Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	private UserRepo userRepo;
+	private SettingsRepo settingsRepo;
 
 	@Transactional
 	public ApiBaseResponse doUpdateSettings(SettingsDto p_dto, UserEntity p_user, String p_locale) throws Exception {
 		if (p_user.getUsername() != null) {
-			p_user = this.userRepo.findByUsername(p_user.getUsername());
-			p_user.setTheme(p_dto.getTheme());
-			p_user.setLocale(p_dto.getLocale());
-			userRepo.save(p_user);
+			SettingsEntity settings = this.settingsRepo.findByUser_Username(p_user.getUsername());
+			settings.setTheme(p_dto.getTheme());
+			settings.setLocale(p_dto.getLocale());
+			this.settingsRepo.save(settings);
 			return null;	
 		} else
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);

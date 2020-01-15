@@ -140,20 +140,9 @@ CREATE TABLE security.sec_user (
 	account_non_expired boolean DEFAULT true NOT NULL,
 	account_non_locked boolean DEFAULT true NOT NULL,
 	credentials_non_expired boolean DEFAULT true NOT NULL,
-	fullname varchar(200) NOT NULL,
 	email varchar(150) NOT NULL,
-	address text,
-	city varchar(200),
-	province varchar(200),
-	district_code varchar(100),
-	phone_number varchar(20),
-	mobile_number varchar(20),
-	image varchar(250),
-	description text,
 	verification_code varchar(100),
 	raw text,
-	locale varchar(10) DEFAULT 'en-US' NOT NULL,
-	theme varchar(10) DEFAULT 'default' NOT NULL,
 	authority_default varchar(100),
 	"version" int DEFAULT 0 NOT NULL,
 	is_active boolean DEFAULT true NOT NULL,
@@ -162,6 +151,41 @@ CREATE TABLE security.sec_user (
 	modified_date timestamp,
 	modified_by varchar(25),
 	PRIMARY KEY (user_uuid)
+);
+CREATE TABLE security.sec_profile (
+	profile_uuid varchar(36) NOT NULL,
+	fullname varchar(200) NOT NULL,
+	address text,
+	city varchar(200),
+	province varchar(200),
+	district varchar(200),
+	sub_district varchar(200),
+	zipcode varchar(200),
+	phone_number varchar(20),
+	mobile_number varchar(20),
+	image varchar(250),
+	description text,
+	"version" int DEFAULT 0 NOT NULL,
+	is_active boolean DEFAULT true NOT NULL,
+	created_date timestamp DEFAULT CURRENT_TIMESTAMP,
+	created_by varchar(25),
+	modified_date timestamp,
+	modified_by varchar(25),
+	user_uuid varchar(36) NOT NULL,
+	PRIMARY KEY (profile_uuid)
+);
+CREATE TABLE security.sec_settings (
+	settings_uuid varchar(36) NOT NULL,
+	locale varchar(10) DEFAULT 'en-US' NOT NULL,
+	theme varchar(10) DEFAULT 'default' NOT NULL,
+	"version" int DEFAULT 0 NOT NULL,
+	is_active boolean DEFAULT true NOT NULL,
+	created_date timestamp DEFAULT CURRENT_TIMESTAMP,
+	created_by varchar(25),
+	modified_date timestamp,
+	modified_by varchar(25),
+	user_uuid varchar(36) NOT NULL,
+	PRIMARY KEY (settings_uuid)
 );
 
 ALTER TABLE security.sec_user ADD CONSTRAINT username UNIQUE (username);
@@ -197,5 +221,13 @@ ALTER TABLE security.sec_r_user_role
 	REFERENCES security.sec_role (role_uuid);
 
 ALTER TABLE security.sec_r_user_role
+	ADD FOREIGN KEY (user_uuid) 
+	REFERENCES security.sec_user (user_uuid);
+
+ALTER TABLE security.sec_profile
+	ADD FOREIGN KEY (user_uuid) 
+	REFERENCES security.sec_user (user_uuid);
+
+ALTER TABLE security.sec_settings
 	ADD FOREIGN KEY (user_uuid) 
 	REFERENCES security.sec_user (user_uuid);

@@ -16,7 +16,7 @@ import io.github.xaphira.common.aspect.ResponseSuccess;
 import io.github.xaphira.common.exceptions.BaseControllerException;
 import io.github.xaphira.common.http.ApiBaseResponse;
 import io.github.xaphira.common.utils.SuccessCode;
-import io.github.xaphira.feign.dto.security.UserDto;
+import io.github.xaphira.feign.dto.security.ProfileDto;
 import io.github.xaphira.security.entity.UserEntity;
 import io.github.xaphira.security.service.ProfileImplService;
 
@@ -31,16 +31,16 @@ public class ProfileController extends BaseControllerException {
 	@RequestMapping(value = "/trx/auth/profile/v.1", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ApiBaseResponse> putProfile(Authentication authentication,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale,
-			@RequestBody(required = true) UserDto p_dto) throws Exception {
+			@RequestBody(required = true) ProfileDto p_dto) throws Exception {
 		UserEntity user = (UserEntity) authentication.getPrincipal();
 		return new ResponseEntity<ApiBaseResponse>(profileService.doUpdateProfile(p_dto, user, locale), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/vw/get/profile/v.1", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserDto> getProfile(Authentication authentication,
+	public ResponseEntity<ProfileDto> getProfile(Authentication authentication,
 			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
 		UserEntity user = (UserEntity) authentication.getPrincipal();
-		return new ResponseEntity<UserDto>(profileService.getProfile(user, locale), HttpStatus.OK);
+		return new ResponseEntity<ProfileDto>(profileService.getProfile(user, locale), HttpStatus.OK);
 	}
 	
 }
