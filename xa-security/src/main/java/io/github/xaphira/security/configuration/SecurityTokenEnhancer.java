@@ -39,7 +39,7 @@ public class SecurityTokenEnhancer implements TokenEnhancer {
 	        Map<String, Object> additionalInfo = new TreeMap<String, Object>();	
 			if(authentication.getOAuth2Request().getClientId().equals(clientIdWeb) && user.getRaw() == null) {
 				try {
-					additionalInfo.put("menus", menuService.loadMenuByRole(user.getAuthorityDefault(), user.getSettings().getLocale()));
+					additionalInfo.put("menus", menuService.loadMenuByRole(user.getAuthorityDefault(), user.getSettings().getLocaleCode()));
 				} catch (Exception e) {
 					LOGGER.error(e.getMessage(), e);
 				}
@@ -48,7 +48,7 @@ public class SecurityTokenEnhancer implements TokenEnhancer {
 	        additionalInfo.put("authority", user.getAuthorityDefault());
 	        additionalInfo.put("email", user.getEmail());
 	        additionalInfo.put("name", (user.getProfile() == null)? null : user.getProfile().getName());
-	        additionalInfo.put("locale", (user.getSettings() == null)? "en-US" : user.getSettings().getLocale());
+	        additionalInfo.put("locale", (user.getSettings() == null)? "en-US" : user.getSettings().getLocaleCode());
 	        additionalInfo.put("theme", (user.getSettings() == null)? "default" : user.getSettings().getTheme());
 	        additionalInfo.put("server_date", DateUtil.DATE.format(new Date()));
 	        additionalInfo.put("xrkey", publicKey);

@@ -176,7 +176,8 @@ CREATE TABLE security.sec_profile (
 );
 CREATE TABLE security.sec_settings (
 	settings_uuid varchar(36) NOT NULL,
-	locale varchar(10) DEFAULT 'en-US' NOT NULL,
+	locale_code varchar(10) DEFAULT 'en-US' NOT NULL,
+	locale_identifier varchar(10) DEFAULT 'English (United States)' NOT NULL,
 	theme varchar(10) DEFAULT 'default' NOT NULL,
 	"version" int DEFAULT 0 NOT NULL,
 	is_active boolean DEFAULT true NOT NULL,

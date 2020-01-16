@@ -18,7 +18,8 @@ public class SettingsDto extends BaseAuditDto {
 	 * 
 	 */
 	private static final long serialVersionUID = 2624389791249022903L;
-	private String locale;
+	private String localeCode;
+	private String localeIdentifier;
     private String theme;
 
 }

@@ -36,4 +36,12 @@ public class SettingsController extends BaseControllerException {
 		return new ResponseEntity<ApiBaseResponse>(settingsService.doUpdateSettings(p_dto, user, locale), HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/vw/get/settings/v.1", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<SettingsDto> getSettings(Authentication authentication,
+			@RequestHeader(name = HttpHeaders.ACCEPT_LANGUAGE, required = false) String locale) throws Exception {
+		UserEntity user = (UserEntity) authentication.getPrincipal();
+		return new ResponseEntity<SettingsDto>(settingsService.getSettings(user, locale), HttpStatus.OK);
+	}
+	
+	
 }

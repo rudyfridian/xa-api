@@ -27,9 +27,24 @@ public class SettingsImplService {
 		if (p_user.getUsername() != null) {
 			SettingsEntity settings = this.settingsRepo.findByUser_Username(p_user.getUsername());
 			settings.setTheme(p_dto.getTheme());
-			settings.setLocale(p_dto.getLocale());
+			if (p_dto.getLocaleCode() != null)
+				settings.setLocaleCode(p_dto.getLocaleCode());
+			if (p_dto.getLocaleIdentifier() != null)
+				settings.setLocaleIdentifier(p_dto.getLocaleIdentifier());
 			this.settingsRepo.save(settings);
 			return null;	
+		} else
+			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
+	}
+	
+	public SettingsDto getSettings(UserEntity p_user, String p_locale) throws Exception {
+		if (p_user.getUsername() != null) {
+			SettingsDto dto = new SettingsDto();
+			SettingsEntity settings = this.settingsRepo.findByUser_Username(p_user.getUsername());
+			dto.setLocaleCode(settings.getLocaleCode());
+			dto.setLocaleIdentifier(settings.getLocaleIdentifier());
+			dto.setTheme(settings.getTheme());
+			return dto;
 		} else
 			throw new SystemErrorException(ErrorCode.ERR_SYS0404);
 	}
