@@ -45,6 +45,9 @@ public class SettingsEntity extends BaseAuditEntity {
 	@Column(name = "locale_identifier", nullable = false)
 	private String localeIdentifier;
 
+	@Column(name = "locale_icon")
+	private String localeIcon = "us";
+
 	@Column(name = "theme", nullable = false)
 	private String theme = "locale";
 

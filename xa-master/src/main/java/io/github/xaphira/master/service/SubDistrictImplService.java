@@ -28,7 +28,7 @@ public class SubDistrictImplService extends CommonService {
 		response.setTotalFiltered(new Long(subDistrict.getContent().size()));
 		response.setTotalRecord(subDistrictRepo.count(SubDistrictSpecification.getSelect(filter.getKeyword())));
 		subDistrict.getContent().forEach(value -> {
-			response.getData().add(new SelectDto(value.getSubDistrictName(), value.getSubDistrictCode(), !value.isActive()));
+			response.getData().add(new SelectDto(value.getSubDistrictName(), value.getSubDistrictCode(), !value.isActive(), null));
 		});
 		return response;
 	}

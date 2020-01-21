@@ -30,7 +30,7 @@ public class LocaleImplService extends CommonService {
 		response.setTotalFiltered(new Long(locale.getContent().size()));
 		response.setTotalRecord(localeRepo.count(LocaleSpecification.getSelect(filter.getKeyword())));
 		locale.getContent().forEach(value -> {
-			response.getData().add(new SelectDto(value.getIdentifier(), value.getLocaleCode(), !value.isActive()));
+			response.getData().add(new SelectDto(value.getIdentifier(), value.getLocaleCode(), !value.isActive(), value.getIcon()));
 		});
 		return response;
 	}
@@ -41,7 +41,7 @@ public class LocaleImplService extends CommonService {
 		response.setTotalFiltered(new Long(locale.size()));
 		response.setTotalRecord(new Long(locale.size()));
 		locale.forEach(value -> {
-			response.getData().add(new SelectDto(value.getIdentifier(), value.getLocaleCode(), !value.isActive()));
+			response.getData().add(new SelectDto(value.getIdentifier(), value.getLocaleCode(), !value.isActive(), value.getIcon()));
 		});
 		return response;
 	}

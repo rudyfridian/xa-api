@@ -30,7 +30,7 @@ public class CityImplService extends CommonService {
 		response.setTotalFiltered(new Long(city.getContent().size()));
 		response.setTotalRecord(cityRepo.count(CitySpecification.getSelect(filter.getKeyword())));
 		city.getContent().forEach(value -> {
-			response.getData().add(new SelectDto(value.getCityName(), value.getCityCode(), !value.isActive()));
+			response.getData().add(new SelectDto(value.getCityName(), value.getCityCode(), !value.isActive(), null));
 		});
 		return response;
 	}

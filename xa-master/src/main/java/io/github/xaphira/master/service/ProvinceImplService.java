@@ -28,7 +28,7 @@ public class ProvinceImplService extends CommonService {
 		response.setTotalFiltered(new Long(province.getContent().size()));
 		response.setTotalRecord(provinceRepo.count(ProvinceSpecification.getSelect(filter.getKeyword())));
 		province.getContent().forEach(value -> {
-			response.getData().add(new SelectDto(value.getProvinceName(), value.getProvinceCode(), !value.isActive()));
+			response.getData().add(new SelectDto(value.getProvinceName(), value.getProvinceCode(), !value.isActive(), null));
 		});
 		return response;
 	}

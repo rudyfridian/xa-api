@@ -31,6 +31,8 @@ public class SettingsImplService {
 				settings.setLocaleCode(p_dto.getLocaleCode());
 			if (p_dto.getLocaleIdentifier() != null)
 				settings.setLocaleIdentifier(p_dto.getLocaleIdentifier());
+			if (p_dto.getLocaleIcon() != null)
+				settings.setLocaleIcon(p_dto.getLocaleIcon());
 			this.settingsRepo.save(settings);
 			return null;	
 		} else
@@ -43,6 +45,7 @@ public class SettingsImplService {
 			SettingsEntity settings = this.settingsRepo.findByUser_Username(p_user.getUsername());
 			dto.setLocaleCode(settings.getLocaleCode());
 			dto.setLocaleIdentifier(settings.getLocaleIdentifier());
+			dto.setLocaleIcon(settings.getLocaleIcon());
 			dto.setTheme(settings.getTheme());
 			return dto;
 		} else
